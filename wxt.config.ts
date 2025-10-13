@@ -6,7 +6,6 @@ export default defineConfig({
   outDir: 'dist',
   modules: ['@wxt-dev/module-svelte', '@wxt-dev/i18n/module'],
   manifest: {
-    manifest_version: 3,
     name: '__MSG_extension_name__' + ' ' + '__MSG_extension_subname__',
     description: '__MSG_extension_description__',
     default_locale: 'en',
