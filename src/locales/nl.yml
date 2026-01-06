@@ -10,8 +10,8 @@ global:
   enabled: Ingeschakeld
   disabled: Uitgeschakeld
   support: Ondersteuning
-  wwwMain: cybergrandpa.top/?utm_source=webext&utm_medium=web
-  wwwHelp: help.cybergrandpa.top
+  wwwMain: cybergrandpa.space/?utm_source=webext&utm_medium=web
+  wwwHelp: help.cybergrandpa.space
   save: Opslaan
   saveAndClose: Opslaan en Sluiten
   close: Sluiten

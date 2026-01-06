@@ -10,8 +10,8 @@ global:
   enabled: Activado
   disabled: Desactivado
   support: Apoio
-  wwwMain: cybergrandpa.top/?utm_source=webext&utm_medium=web
-  wwwHelp: help.cybergrandpa.top
+  wwwMain: cybergrandpa.space/?utm_source=webext&utm_medium=web
+  wwwHelp: help.cybergrandpa.space
   save: Guardar
   saveAndClose: Guardar e Fechar
   close: Fechar

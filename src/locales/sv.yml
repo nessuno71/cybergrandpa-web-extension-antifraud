@@ -10,8 +10,8 @@ global:
   enabled: Aktiverad
   disabled: Inaktiverad
   support: Support
-  wwwMain: cybergrandpa.top/?utm_source=webext&utm_medium=web
-  wwwHelp: help.cybergrandpa.top
+  wwwMain: cybergrandpa.space/?utm_source=webext&utm_medium=web
+  wwwHelp: help.cybergrandpa.space
   save: Spara
   saveAndClose: Spara och stäng
   close: Stäng

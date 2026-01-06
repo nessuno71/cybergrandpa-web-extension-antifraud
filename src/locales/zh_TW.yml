@@ -10,8 +10,8 @@ global:
   enabled: 已啟用
   disabled: 已停用
   support: 支援
-  wwwMain: cybergrandpa.top/?utm_source=webext&utm_medium=web
-  wwwHelp: help.cybergrandpa.top
+  wwwMain: cybergrandpa.space/?utm_source=webext&utm_medium=web
+  wwwHelp: help.cybergrandpa.space
   save: 儲存
   saveAndClose: 儲存並關閉
   close: 關閉
