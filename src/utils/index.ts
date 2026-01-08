@@ -12,5 +12,6 @@ export * from './get-stream';
 export * from './get-tab-id';
 export * from './get-variable-name';
 export * from './is-ignore-url-match';
+export * from './logger';
 export * from './send-message';
 export * from './types';

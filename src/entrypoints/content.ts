@@ -1,5 +1,6 @@
 import '@/styles/style.scss';
 import { ENV_APP_VERSION, type SendMessageParams, getLog } from '@/utils';
+import { logger } from '@/utils/logger';
 import { createUi } from '@/utils/create-ui';
 import { ContentScriptContext } from 'wxt/utils/content-script-context';
 
@@ -49,7 +50,7 @@ const mainContentScript = async (ctx: ContentScriptContext) => {
 
   addListeners();
 
-  console.log('content script loaded. ENV_APP_VERSION:', ENV_APP_VERSION);
+  logger.info('content script loaded. ENV_APP_VERSION:', ENV_APP_VERSION);
 };
 
 export default defineContentScript({

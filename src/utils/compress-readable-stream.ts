@@ -1,3 +1,5 @@
+import { logger } from './logger';
+
 // Utility to compress a ReadableStream to base64String
 export const compressReadableStream = async (readableStream: ReadableStream<Uint8Array>) => {
   try {
@@ -41,7 +43,7 @@ export const compressReadableStream = async (readableStream: ReadableStream<Uint
 
     return base64String ? String(base64String) : '';
   } catch (error) {
-    console.error('Error compressing stream:', error);
+    logger.error('Error compressing stream:', error);
     throw error;
   }
 };
@@ -65,7 +67,7 @@ export const decompressReadableStream = (base64String: string) => {
     // Decompress the stream
     return compressedStream.pipeThrough(new DecompressionStream('gzip'));
   } catch (error) {
-    console.error('Error retrieving compressed stream:', error);
+    logger.error('Error retrieving compressed stream:', error);
     throw error;
   }
 };
@@ -88,7 +90,7 @@ export const convertReadableStreamToString = async (readableStream: ReadableStre
 
     return result;
   } catch (error) {
-    console.error('Error converting readable stream to string:', error);
+    logger.error('Error converting readable stream to string:', error);
     throw error;
   }
 };

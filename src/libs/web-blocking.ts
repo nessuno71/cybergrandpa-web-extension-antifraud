@@ -1,4 +1,5 @@
 import { CONFIG_LOCAL_URL_PATTERN } from '@/config';
+import { logger } from '@/utils/logger';
 import { browser } from 'wxt/browser';
 import { getUrlService } from './urls-service';
 
@@ -12,7 +13,7 @@ export const initWebBlocking = () => {
       // For test: ---adbs186282--54223580950k.gbc.criteo.com
       const isUrlBlocked = await urlService.seek(details.url);
 
-      console.log('URL:', isUrlBlocked, details.url);
+      logger.debug('URL:', isUrlBlocked, details.url);
 
       if (isUrlBlocked) {
         const response = await browser.scripting.executeScript({
@@ -22,12 +23,12 @@ export const initWebBlocking = () => {
           //   injectImmediately: true,
           args: [details.tabId],
           func: (tabId) => {
-            console.log('closing tab', tabId);
+            // Note: logger not available in injected func context
             browser.tabs.remove(tabId);
           },
         });
 
-        console.log('URL blocked:', response);
+        logger.info('URL blocked:', response);
       }
     },
     { url: CONFIG_LOCAL_URL_PATTERN }

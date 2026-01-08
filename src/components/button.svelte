@@ -1,13 +1,14 @@
 <script lang="ts">
   import { browser } from 'wxt/browser';
+  import { logger } from '@/utils/logger';
   import type { ButtonProps } from '@/utils';
 
   let { children, url, onClick, size, disabled, loading = false }: ButtonProps = $props();
 
   if (!!url && !!onClick) {
-    console.error('Either url or onClick should be defined, not both');
+    logger.error('Button: Either url or onClick should be defined, not both');
   } else if (!url && !onClick) {
-    console.error('Either only url or only onClick should be defined');
+    logger.error('Button: Either only url or only onClick should be defined');
   } else {
     if (!!url && !onClick) {
       onClick = () => browser.tabs.create({ url, active: true });

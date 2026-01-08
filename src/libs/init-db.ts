@@ -1,5 +1,6 @@
 import { STORAGE_KEY_URLS, STREAM_URL } from '@/config';
 import { checkAlarmState, GetStream, type UrlService } from '@/utils';
+import { logger } from '@/utils/logger';
 
 export const initDb = (urlService: UrlService) => {
   let syncUrlsIsBusy = false;
@@ -15,13 +16,13 @@ export const initDb = (urlService: UrlService) => {
 
       urlService.upsert(base64string);
     } catch (error) {
-      console.error(error);
+      logger.error('Failed to sync URL database:', error);
     }
 
     const endTime = performance.now();
 
     syncUrlsIsBusy = false;
-    console.log('syncUrls took:', parseInt(String(endTime - startTime)) + 'ms');
+    logger.info('syncUrls took:', parseInt(String(endTime - startTime)) + 'ms');
   };
 
   // Set interval to sync urls

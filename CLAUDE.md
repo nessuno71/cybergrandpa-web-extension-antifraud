@@ -8,9 +8,12 @@ Cross-browser anti-fraud web extension built with WXT framework and Svelte 5. Bl
 
 ## Core Directives
 
-1. **Svelte 5 Only**: Always use Svelte 5 runes syntax (`$state`, `$derived`, `$effect`). Never use Svelte 4 patterns.
-2. **Cross-browser**: Chrome and Firefox support via Manifest V3
-3. **Package Manager**: Always use `bun` (version 1.2.15)
+- **Framework**: WXT (Web Extension Framework) with TypeScript
+- **Frontend**: Svelte 5 with runes syntax
+- **Styling**: SASS/SCSS with modular architecture
+- **Storage**: WXT storage API with compressed in-memory URL data
+- **Communication**: @webext-core/proxy-service for cross-context messaging
+- **Internationalization**: @wxt-dev/i18n with YAML locale files
 
 ## Development Commands
 
@@ -140,6 +143,11 @@ All components use Svelte 5 runes syntax. Each entrypoint (popup, options, wizar
 - **Communication**: @webext-core/proxy-service
 - **i18n**: @wxt-dev/i18n with YAML files (EN, DE, ES, FR, IT, NL, PT)
 - **TypeScript**: Strict mode enabled
+- **URL Blocking**: Uses compressed blocklist from hblock.molinero.dev/hosts
+- **Real-time Scanning**: Monitors navigation and blocks malicious URLs
+- **Cross-browser Support**: Manifest V3 compatible with Chrome and Firefox
+- **Internationalization**: Multi-language support (28 languages)
+- **Onboarding**: Wizard-based setup for new users
 
 ## Browser Permissions
 
@@ -160,9 +168,12 @@ Required in manifest:
 ## Internationalization
 
 - YAML locale files in `src/locales/` (en.yml, de.yml, es.yml, fr.yml, it.yml, nl.yml, pt.yml)
+- Supports 28 languages including: English, German, Spanish, French, Italian, Dutch, Portuguese, Arabic, Bulgarian, Czech, Danish, Finnish, Hindi, Croatian, Hungarian, Japanese, Korean, Norwegian, Polish, Romanian, Russian, Slovak, Swedish, Turkish, Ukrainian, Chinese (Simplified & Traditional)
 - Access messages via `i18n.t('key')`
 - Manifest strings use `__MSG_key__` format
 - Default locale: `en`
+- Messages accessed via `i18n.t()` function
+- Manifest uses `__MSG_*__` format for localized strings
 
 ## Browser Launcher Customization
 
