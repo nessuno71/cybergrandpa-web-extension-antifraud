@@ -10,8 +10,8 @@ global:
   enabled: 有効
   disabled: 無効
   support: サポート
-  wwwMain: cybergrandpa.top/?utm_source=webext&utm_medium=web
-  wwwHelp: help.cybergrandpa.top
+  wwwMain: cybergrandpa.space/?utm_source=webext&utm_medium=web
+  wwwHelp: help.cybergrandpa.space
   save: 保存
   saveAndClose: 保存して閉じる
   close: 閉じる

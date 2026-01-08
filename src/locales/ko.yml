@@ -10,8 +10,8 @@ global:
   enabled: 활성화
   disabled: 비활성화
   support: 지원
-  wwwMain: cybergrandpa.top/?utm_source=webext&utm_medium=web
-  wwwHelp: help.cybergrandpa.top
+  wwwMain: cybergrandpa.space/?utm_source=webext&utm_medium=web
+  wwwHelp: help.cybergrandpa.space
   save: 저장
   saveAndClose: 저장하고 닫기
   close: 닫기

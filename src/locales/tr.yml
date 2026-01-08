@@ -10,8 +10,8 @@ global:
   enabled: Etkin
   disabled: Devre dışı
   support: Destek
-  wwwMain: cybergrandpa.top/?utm_source=webext&utm_medium=web
-  wwwHelp: help.cybergrandpa.top
+  wwwMain: cybergrandpa.space/?utm_source=webext&utm_medium=web
+  wwwHelp: help.cybergrandpa.space
   save: Kaydet
   saveAndClose: Kaydet ve Kapat
   close: Kapat

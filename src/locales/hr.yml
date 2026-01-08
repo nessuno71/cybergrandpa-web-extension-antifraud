@@ -10,8 +10,8 @@ global:
   enabled: Omogućeno
   disabled: Onemogućeno
   support: Podrška
-  wwwMain: cybergrandpa.top/?utm_source=webext&utm_medium=web
-  wwwHelp: help.cybergrandpa.top
+  wwwMain: cybergrandpa.space/?utm_source=webext&utm_medium=web
+  wwwHelp: help.cybergrandpa.space
   save: Spremi
   saveAndClose: Spremi i zatvori
   close: Zatvori
