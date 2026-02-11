@@ -214,17 +214,20 @@ This document outlines the development roadmap for the CyberGrandpa Anti-Fraud w
 ## Technical Debt
 
 ### High Priority
+
 1. **Architecture Mismatch:** Documentation mentions LokiJS but code uses WXT storage
 2. **Commented Code:** close.content.ts has 90% of code commented out
 3. **Fake Features:** Page scanning overlay doesn't actually scan
 4. **Console Logs:** 9 files have debug console.log statements
 
 ### Medium Priority
+
 1. **Error Handling:** Minimal error handling in async operations
 2. **Type Safety:** Some any types could be more specific
 3. **Code Duplication:** Some repeated patterns could be abstracted
 
 ### Low Priority
+
 1. **Bundle Size:** Could optimize with code splitting
 2. **Icon Assets:** Multiple sizes could be optimized
 3. **CSS Organization:** Some style duplication across components
@@ -232,6 +235,7 @@ This document outlines the development roadmap for the CyberGrandpa Anti-Fraud w
 ## Success Metrics
 
 ### v0.1.0 Release Criteria
+
 - [ ] All Phase 1 critical fixes completed
 - [ ] Test coverage ≥ 70%
 - [ ] No console.log in production code
@@ -240,6 +244,7 @@ This document outlines the development roadmap for the CyberGrandpa Anti-Fraud w
 - [ ] Documentation updated
 
 ### v1.0.0 Release Criteria
+
 - [ ] All v0.1.0 criteria met
 - [ ] All Phase 3 production readiness items completed
 - [ ] Test coverage ≥ 85%
@@ -251,16 +256,19 @@ This document outlines the development roadmap for the CyberGrandpa Anti-Fraud w
 ## Risk Assessment
 
 ### High Risk
+
 - **Tab Blocking Reliability:** Current implementation may fail in edge cases
 - **Page Scanning Feature:** Non-functional feature may confuse users
 - **No Testing:** High bug risk without automated tests
 
 ### Medium Risk
+
 - **Premium Features Confusion:** UI exists but features not implemented
 - **Blocklist Sync Failure:** No retry mechanism for failed syncs
 - **Memory Usage:** Compressed blocklist in memory may cause issues on low-end devices
 
 ### Low Risk
+
 - **Browser API Changes:** Manifest V3 is stable but may evolve
 - **Internationalization:** Over-engineered with 28 languages (low usage for some)
 - **Build Tool Updates:** WXT framework is actively maintained

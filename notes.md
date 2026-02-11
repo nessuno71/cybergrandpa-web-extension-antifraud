@@ -97,6 +97,7 @@ Reference: [WXT Svelte Custom Store Example](https://github.com/wxt-dev/examples
 ### Blocklist Source
 
 The extension uses the following URL for the blocklist:
+
 ```
 https://hblock.molinero.dev/hosts
 ```
