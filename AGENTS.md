@@ -173,12 +173,19 @@ const result = await urlService.seek('https://example.com');
 
 ## AI Instructions Files
 
-This project includes multiple AI instruction files for different tools:
+This project uses the latest Windsurf documentation structure:
 
-- **`.cursorrules`**: Cursor IDE specific rules with detailed component patterns
-- **`.windsurfrules`**: Windsurf editor specific rules
-- **`CLAUDE.md`**: Claude Code specific guidance with comprehensive architecture docs
-- **`AGENTS.md`**: This file - universal AI agent instructions
+- **`.windsurf/AGENTS.md`**: Root fallback instructions
+- **`.windsurf/rules/`**: Cross-cutting rules with frontmatter
+  - `global.md` - Development commands and workflows (always on)
+  - `security.md` - Security best practices
+  - `performance.md` - Performance guidelines
+- **Directory-specific AGENTS.md**: Location-based instructions
+  - `src/AGENTS.md` - Core development directives
+  - `src/entrypoints/AGENTS.md` - WXT entrypoint patterns
+  - `src/libs/AGENTS.md` - Service and library patterns
+  - `src/components/AGENTS.md` - Svelte component guidelines
+  - `src/utils/AGENTS.md` - Utility function patterns
 
 When updating patterns or architecture, update all relevant files to maintain consistency.
 
