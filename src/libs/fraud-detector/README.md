@@ -4,10 +4,10 @@ Heuristic-based script analysis library for the CyberGrandpa anti-fraud browser 
 
 ## Scan Tiers
 
-| Tier | Who | Trigger | What it checks | Perf budget |
-|------|-----|---------|---------------|-------------|
-| **Light** | Premium (realtime) / Basic (manual) | Auto on navigation or manual "Scan" | Inline scripts + event handlers, high-weight patterns only (≥6), entropy check, no external fetch | <50ms |
-| **Deep** | Premium (realtime on idle) / Both (manual) | Page idle or manual "Deep Scan" | All scripts incl. external fetch, full pattern set, entropy + minification heuristics | <500ms |
+| Tier      | Who                                        | Trigger                             | What it checks                                                                                    | Perf budget |
+| --------- | ------------------------------------------ | ----------------------------------- | ------------------------------------------------------------------------------------------------- | ----------- |
+| **Light** | Premium (realtime) / Basic (manual)        | Auto on navigation or manual "Scan" | Inline scripts + event handlers, high-weight patterns only (≥6), entropy check, no external fetch | <50ms       |
+| **Deep**  | Premium (realtime on idle) / Both (manual) | Page idle or manual "Deep Scan"     | All scripts incl. external fetch, full pattern set, entropy + minification heuristics             | <500ms      |
 
 ## Usage
 
