@@ -1,12 +1,14 @@
-interface ScriptInfo {
-  type: 'external' | 'inline' | 'event_handler' | 'javascript_url';
+export type ScriptType = 'external' | 'inline' | 'event_handler' | 'javascript_url';
+
+export interface ScriptInfo {
+  type: ScriptType;
   source: string;
   content: string | null;
   element: Element;
   id: string;
 }
 
-interface PatternMatch {
+export interface PatternMatch {
   pattern: string;
   count: number;
   weight: number;
@@ -14,7 +16,7 @@ interface PatternMatch {
   samples: string[];
 }
 
-interface ScriptAnalysis {
+export interface ScriptAnalysisResult {
   suspicious: boolean;
   score: number;
   matches: PatternMatch[];
@@ -22,29 +24,39 @@ interface ScriptAnalysis {
   entropy?: number;
 }
 
-interface AnalysisResult {
+export interface PageAnalysisResult {
   totalScripts: number;
   suspiciousScripts: number;
-  results: ScriptAnalysis[];
+  results: ScriptAnalysisResult[];
   timestamp: string;
 }
 
-type RiskLevel = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-type Severity = 'LOW' | 'MEDIUM' | 'HIGH';
+export enum RiskLevel {
+  LOW = 'LOW',
+  MEDIUM = 'MEDIUM',
+  HIGH = 'HIGH',
+  CRITICAL = 'CRITICAL',
+}
 
-interface ThreatDetail {
+export enum Severity {
+  LOW = 'LOW',
+  MEDIUM = 'MEDIUM',
+  HIGH = 'HIGH',
+}
+
+export interface ThreatSummary {
   pattern: string;
   severity: Severity;
 }
 
-interface ReportDetail {
+export interface ReportDetail {
   type: ScriptInfo['type'];
   source: string;
   score: number;
-  topThreats: ThreatDetail[];
+  topThreats: ThreatSummary[];
 }
 
-interface Report {
+export interface FraudReport {
   summary: {
     totalScripts: number;
     suspiciousCount: number;
@@ -224,7 +236,7 @@ export class FraudDetector {
   }
 
   // Analyze script content for suspicious patterns
-  analyzeScript(scriptContent: string, scriptInfo?: ScriptInfo): ScriptAnalysis {
+  analyzeScript(scriptContent: string, scriptInfo?: ScriptInfo): ScriptAnalysisResult {
     if (!scriptContent || typeof scriptContent !== 'string') {
       return { suspicious: false, score: 0, matches: [] };
     }
@@ -297,7 +309,7 @@ export class FraudDetector {
     const len = text.length;
 
     for (const char in freq) {
-      const p = freq[char] / len;
+      const p = (freq[char] ?? 0) / len;
       entropy -= p * Math.log2(p);
     }
 
@@ -305,9 +317,9 @@ export class FraudDetector {
   }
 
   // Main analysis function
-  async analyzePageScripts(): Promise<AnalysisResult> {
+  async analyzePageScripts(): Promise<PageAnalysisResult> {
     const scripts = this.extractPageScripts();
-    const results: ScriptAnalysis[] = [];
+    const results: ScriptAnalysisResult[] = [];
 
     for (const script of scripts) {
       let content = script.content;
@@ -334,8 +346,8 @@ export class FraudDetector {
   }
 
   // Generate a summary report
-  generateReport(analysisResult: AnalysisResult): Report {
-    const report: Report = {
+  generateReport(analysisResult: PageAnalysisResult): FraudReport {
+    const report: FraudReport = {
       summary: {
         totalScripts: analysisResult.totalScripts,
         suspiciousCount: analysisResult.suspiciousScripts,
@@ -351,7 +363,7 @@ export class FraudDetector {
           .slice(0, 3)
           .map((match) => ({
             pattern: match.pattern,
-            severity: (match.score >= 8 ? 'HIGH' : match.score >= 5 ? 'MEDIUM' : 'LOW') as Severity,
+            severity: match.score >= 8 ? Severity.HIGH : match.score >= 5 ? Severity.MEDIUM : Severity.LOW,
           })),
       })),
     };
@@ -359,16 +371,16 @@ export class FraudDetector {
     return report;
   }
 
-  private calculateRiskLevel(results: ScriptAnalysis[]): RiskLevel {
-    if (results.length === 0) return 'LOW';
+  private calculateRiskLevel(results: ScriptAnalysisResult[]): RiskLevel {
+    if (results.length === 0) return RiskLevel.LOW;
 
     const maxScore = Math.max(...results.map((r) => r.score));
     const avgScore = results.reduce((sum, r) => sum + r.score, 0) / results.length;
 
-    if (maxScore >= 20 || avgScore >= 15) return 'CRITICAL';
-    if (maxScore >= 15 || avgScore >= 10) return 'HIGH';
-    if (maxScore >= 10 || avgScore >= 7) return 'MEDIUM';
-    return 'LOW';
+    if (maxScore >= 20 || avgScore >= 15) return RiskLevel.CRITICAL;
+    if (maxScore >= 15 || avgScore >= 10) return RiskLevel.HIGH;
+    if (maxScore >= 10 || avgScore >= 7) return RiskLevel.MEDIUM;
+    return RiskLevel.LOW;
   }
 
   private getWeightForPattern(pattern: RegExp): number {
@@ -383,7 +395,7 @@ export class FraudDetector {
 }
 
 // Usage example for browser extension
-export async function runFraudDetection(): Promise<Report | null> {
+export async function runFraudDetection(): Promise<FraudReport | null> {
   const detector = new FraudDetector();
 
   try {
