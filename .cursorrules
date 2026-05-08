@@ -4,38 +4,41 @@ You are an AI assistant helping with a cross-browser web extension project built
 
 ## Core Directives
 
-1. **Svelte 5 Only**: Always use Svelte 5 syntax with runes. Never suggest Svelte 4 solutions or syntax.
+1. **Svelte 5 Only**: Always use Svelte 5 syntax with runes (`$state`, `$derived`, `$effect`). Never suggest Svelte 4 solutions or syntax.
 2. **Cross-browser Extension**: This is a web extension that must work across Chrome and Firefox using Manifest V3.
 3. **No Formatting Suggestions**: Do not provide inline formatting suggestions - focus on functionality and architecture.
 4. **Package Manager**: Always use `bun` for package management operations.
+5. **TypeScript Strict Mode**: All code must use strict TypeScript typing.
 
 ## Project Overview
 
-This is an anti-fraud and safety web extension that blocks malicious URLs using a distributed blocklist system. The extension provides real-time URL blocking, cross-browser compatibility, and multi-language support.
+Cross-browser anti-fraud web extension that blocks malicious URLs using a distributed blocklist system with real-time protection. The extension provides real-time URL blocking, cross-browser compatibility, and comprehensive multi-language support for 28 languages.
 
 ## Technology Stack
 
-- **Framework**: WXT (Web Extension Framework) with TypeScript
-- **Frontend**: Svelte 5 with runes syntax
-- **Styling**: SASS/SCSS with modular architecture
+- **Framework**: WXT 0.20.15 (Web Extension Framework) with TypeScript
+- **Frontend**: Svelte 5.50.1 with runes syntax
+- **Styling**: SASS/SCSS with modular architecture, PostCSS with rem-to-px conversion
 - **Database**: LokiJS for in-memory URL storage
 - **Communication**: @webext-core/proxy-service for cross-context messaging
-- **Internationalization**: @wxt-dev/i18n with YAML locale files
+- **Storage**: WXT storage API with compressed in-memory URL data
+- **Internationalization**: @wxt-dev/i18n with YAML locale files (28 languages supported)
+- **Import Aliases**: `@/` maps to `src/`
 
 ## Development Commands
 
 ### Building and Development
 
-- `bun dev` - Start development server with hot reload
+- `bun dev` - Start development server with hot reload (Chrome)
 - `bun dev:firefox` - Start development server for Firefox
-- `bun build` - Build extension for production
+- `bun build` - Build extension for production (Chrome)
 - `bun build:firefox` - Build extension for Firefox specifically
-- `bun zip` - Create distribution ZIP file
+- `bun zip` - Create distribution ZIP file (Chrome)
 - `bun zip:firefox` - Create Firefox distribution ZIP
 
 ### Code Quality
 
-- `bun lint` - Run prettier check and ESLint
+- `bun lint` - Run Prettier check + ESLint
 - `bun format` - Format code with Prettier
 - `bun check` - Run Svelte type checking
 - `bun check:watch` - Run Svelte type checking in watch mode
@@ -49,41 +52,88 @@ This is an anti-fraud and safety web extension that blocks malicious URLs using 
 
 ### Entrypoints Structure (`src/entrypoints/`)
 
-- `background.ts` - Service worker for extension lifecycle, message passing, and URL blocking
-- `content.ts` - Content script for page scanning and UI injection
-- `close.content.ts` - Content script for closing/blocking tabs
-- `popup/` - Extension popup interface
-- `options/` - Extension settings page
-- `wizard/` - Onboarding wizard for new users
+The extension uses WXT's entrypoint system:
+
+- **`background.ts`** - Service worker that orchestrates the extension:
+  - Registers `urlService` via proxy-service for cross-context access
+  - Handles `onInstalled`, `onStartup`, `onSuspend` lifecycle events
+  - Opens wizard on first install
+  - Forwards messages between contexts via `forwardMessageToCss()`
+  - Initializes database (`initDb()`) and web blocking (`initWebBlocking()`)
+
+- **`content.ts`** - Content script for page scanning and UI injection
+
+- **`close.content.ts`** - Content script for closing/blocking malicious tabs
+
+- **`popup/`** - Browser action popup (index.html + main.ts + popup.svelte)
+
+- **`options/`** - Extension settings page (index.html + main.ts + options.svelte)
+
+- **`wizard/`** - Onboarding wizard for new users (index.html + main.ts + wizard.svelte)
 
 ### Core Services (`src/libs/`)
 
-- `urls-service.ts` - URL blocklist management with compressed storage
-- `web-blocking.ts` - Real-time URL blocking using webNavigation API
-- `store.ts` - Persistent storage management
-- `init-db.ts` - Database initialization and setup
+**URL Service (`urls-service.ts`)**: Central blocklist management
+
+- Uses `@webext-core/proxy-service` to expose methods across all contexts
+- Methods: `count()`, `getRows(limit, offset)`, `seek(url)`, `upsert(base64string)`
+- Stores compressed base64 blocklist in WXT storage
+- Decompresses and parses on read using stream utilities
+- Array kept in memory for fast lookups
+
+**Database Initialization (`init-db.ts`)**: Blocklist sync orchestration
+
+- Fetches blocklist from `https://hblock.molinero.dev/hosts`
+- Converts stream to base64 and stores via `urlService.upsert()`
+- Uses `browser.alarms` API for periodic sync (see `checkAlarmState()`)
+- Self-starts 500ms after background script loads
+
+**Web Blocking (`web-blocking.ts`)**: Real-time URL interception
+
+- Listens to `webNavigation.onBeforeNavigate` for outermost frames
+- Checks URL against blocklist via `urlService.seek()`
+- Closes tab immediately if URL is blocked
+- Only monitors URLs matching `CONFIG_LOCAL_URL_PATTERN`
+
+**Storage (`store.ts`)**: Persistent settings management
+
+- Creates typed stores using `createStore()` wrapper
+- Stores: `storeProtectionEnabled`, `storeRealtimeEnabled`, `storeScanning`, `storeOnBoardingCompleted`, etc.
+- Uses WXT storage with `local:` or `sync:` prefixes
+
+### Configuration (`src/config.ts`)
+
+- `STORAGE_DB_URLS` - Storage key for compressed blocklist
+- `STREAM_URL` - Blocklist source URL (hblock.molinero.dev/hosts)
+- `CONFIG_LOCAL_URL_PATTERN` - URL patterns to monitor for blocking
+- `CONFIG_LOCAL_URL_MATCHES` - Regex to exclude browser internal URLs
 
 ### Component Architecture (`src/components/`)
 
-- Use modular Svelte 5 components with consistent props interfaces
-- Reusable components: Button, Modal, Toggle, Status, Header
-- App-specific components go in `apps/` directory
-- Icon components go in `icons/` directory
-- Always use Svelte 5 runes syntax (`$state`, `$derived`, `$effect`, etc.)
+Reusable Svelte 5 components:
+
+- Base UI: `button.svelte`, `modal.svelte`, `toggle.svelte`, `status.svelte`, `header.svelte`
+- App components: `apps/overlay-loading-app.svelte`
+- Icons: `icons/flat-cross-icon.svelte`
+
+All components use Svelte 5 runes syntax. Each entrypoint (popup, options, wizard) has its own root component.
 
 ### Utilities (`src/utils/`)
 
-- Cross-context messaging utilities
-- Tab management and activation
-- Stream processing for compressed data
-- Environment and configuration helpers
+Key utility functions:
+
+- **Stream processing**: `GetStream`, `decompressReadableStream()`, `convertReadableStreamToString()` - Handle compressed blocklist data
+- **Storage**: `createStore()` - Wrapper around WXT storage API
+- **Messaging**: `forwardMessageToCss()` - Cross-context message forwarding
+- **Tab management**: `activateTab()`, `getTabId()`
+- **Parsing**: `getArrayFromString()` - Parse hosts file format
 
 ## Key Features to Maintain
 
 - **URL Blocking**: Uses compressed blocklist from hblock.molinero.dev/hosts
 - **Real-time Scanning**: Monitors navigation and blocks malicious URLs
 - **Cross-browser Support**: Manifest V3 compatible with Chrome and Firefox
-- **Internationalization**: Multi-language support (EN, DE, ES, FR, IT, NL, PT)
+- **Internationalization**: Multi-language support (28 languages)
 - **Onboarding**: Wizard-based setup for new users
 
 ## Browser Permissions
@@ -92,7 +142,25 @@ Required permissions:
 
 - `activeTab`, `alarms`, `scripting`, `storage`, `tabs`
 - `webNavigation`, `declarativeNetRequestWithHostAccess`
-- `host_permissions` for all URLs
+- `host_permissions`: `<all_urls>`
+
+## Data Flow
+
+1. **Extension Install/Startup**:
+   - `background.ts` registers `urlService` and listens for lifecycle events
+   - `initDb()` starts blocklist sync from external source
+   - Blocklist compressed, base64-encoded, stored in WXT storage
+   - `urlService` decompresses and keeps array in memory
+
+2. **URL Blocking**:
+   - `initWebBlocking()` listens to `webNavigation.onBeforeNavigate`
+   - For each navigation, checks URL via `urlService.seek()`
+   - If blocked, immediately closes the tab
+
+3. **Cross-Context Communication**:
+   - `@webext-core/proxy-service` exposes `urlService` methods to all contexts
+   - Background script forwards messages via `forwardMessageToCss()`
+   - Content scripts request scanning via runtime messages
 
 ## Storage Strategy
 
@@ -100,22 +168,27 @@ Required permissions:
 - Compressed URL data using streams and base64 encoding
 - Proxy service for cross-context data access
 - Real-time updates across all contexts
+- Blocklist is compressed and stored as base64 to minimize storage usage
+- Stream-based decompression enables handling large blocklists
 
 ## Internationalization
 
-- YAML locale files in `src/locales/`
-- Supports: English, German, Spanish, French, Italian, Dutch, Portuguese
-- Messages accessed via `i18n.t()` function
-- Manifest uses `__MSG_*__` format for localized strings
+- YAML locale files in `src/locales/` (en.yml, de.yml, es.yml, fr.yml, it.yml, nl.yml, pt.yml)
+- Supports 28 languages including: English, German, Spanish, French, Italian, Dutch, Portuguese, Arabic, Bulgarian, Czech, Danish, Finnish, Hindi, Croatian, Hungarian, Japanese, Korean, Norwegian, Polish, Romanian, Russian, Slovak, Swedish, Turkish, Ukrainian, Chinese (Simplified & Traditional)
+- Default locale: `en`
+- Access messages via `i18n.t('key')`
+- Manifest strings use `__MSG_key__` format
 
 ## Code Style Guidelines
 
-- Use TypeScript with strict typing throughout
-- Follow Svelte 5 runes syntax patterns
+- Use TypeScript with strict typing throughout (`tsconfig.json` extends `.wxt/tsconfig.json`)
+- Follow Svelte 5 runes syntax patterns (`$state`, `$derived`, `$effect`)
 - Use SASS/SCSS with modular styling architecture
 - Maintain consistent component prop interfaces
 - Use PostCSS with rem-to-px conversion
-- Follow ESLint configuration for TypeScript and Svelte
+- Follow ESLint + Prettier configuration for TypeScript and Svelte
+- Import aliases: `@/` maps to `src/`
+- Content security policy allows `wasm-unsafe-eval` for extension pages
 
 ## Development Workflow
 
@@ -123,16 +196,44 @@ Required permissions:
 - Browser-specific builds and testing
 - Automatic manifest generation
 - Type checking with Svelte compiler integration
+- WXT automatically generates browser-specific manifests
+- Proxy service pattern allows background script to expose services to all contexts
+
+## Browser Launcher Customization
+
+Create `web-ext.config.ts` in project root to customize browser paths:
+
+```ts
+import { defineWebExtConfig } from 'wxt';
+
+export default defineWebExtConfig({
+  binaries: {
+    chrome: '/path/to/chrome',
+    firefox: 'firefoxdeveloperedition',
+  },
+});
+```
+
+## Key Implementation Notes
+
+- Blocklist is compressed and stored as base64 to minimize storage usage
+- Stream-based decompression enables handling large blocklists
+- Proxy service pattern allows background script to expose services to all contexts
+- WXT automatically generates browser-specific manifests
+- Content security policy allows `wasm-unsafe-eval` for extension pages
 
 When making changes:
 
-1. Always use Svelte 5 syntax and patterns
-2. Ensure cross-browser compatibility
+1. Always use Svelte 5 syntax and patterns (`$state`, `$derived`, `$effect`)
+2. Ensure cross-browser compatibility (Chrome and Firefox)
 3. Maintain TypeScript strict typing
 4. Follow the established component architecture
 5. Use the correct development commands with `bun`
-6. Consider internationalization for user-facing text
+6. Consider internationalization for user-facing text (28 languages supported)
 7. Test both Chrome and Firefox builds when applicable
+8. Use import alias `@/` for src imports
+9. Respect the data flow architecture (proxy-service pattern)
+10. Maintain security best practices for web extensions
 
 ## Detailed Component Patterns
 

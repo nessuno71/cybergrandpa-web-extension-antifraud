@@ -12,8 +12,29 @@ Cross-browser anti-fraud web extension built with WXT framework and Svelte 5. Bl
 - **Frontend**: Svelte 5 with runes syntax
 - **Styling**: SASS/SCSS with modular architecture
 - **Storage**: WXT storage API with compressed in-memory URL data
-- **Communication**: @webext-core/proxy-service for cross-context messaging
+- **Communication**: @webext-core/proxy-service v2.0.0 for cross-context messaging
 - **Internationalization**: @wxt-dev/i18n with YAML locale files
+- **Package Manager**: Bun v1.3.4 (never use npm or yarn)
+
+## Documentation Structure
+
+This project uses the latest Windsurf documentation structure with AGENTS.md files:
+
+- **`AGENTS.md`**: Root fallback instructions for all AI assistants
+- **`.cursorrules`**: Cursor IDE specific rules with detailed patterns
+- **`CLAUDE.md`**: Claude Code comprehensive guidance
+  - `global.md` - Development commands and workflows (always on)
+  - `security.md` - Security best practices
+  - `performance.md` - Performance guidelines
+- **Directory-specific AGENTS.md**: Location-based instructions
+  - `src/AGENTS.md` - Core development directives
+  - `src/entrypoints/AGENTS.md` - WXT entrypoint patterns
+  - `src/libs/AGENTS.md` - Service and library patterns
+  - `src/components/AGENTS.md` - Svelte component guidelines
+  - `src/utils/AGENTS.md` - Utility function patterns
+- **`AGENTS.md`**: Root-level universal AI agent instructions
+
+For Claude Code, refer to the most relevant AGENTS.md file based on the directory you're working in.
 
 ## Development Commands
 
@@ -136,18 +157,20 @@ All components use Svelte 5 runes syntax. Each entrypoint (popup, options, wizar
 
 ## Technology Stack
 
-- **Framework**: WXT 0.20.11 (web extension framework)
-- **Frontend**: Svelte 5.39.11 with runes
-- **Styling**: SASS/SCSS, PostCSS with rem-to-px conversion
+- **Framework**: WXT 0.20.15 (web extension framework)
+- **Frontend**: Svelte 5.50.1 with runes
+- **Styling**: SASS/SCSS 1.97.3, PostCSS with rem-to-px conversion
 - **Database**: LokiJS (in-memory)
-- **Communication**: @webext-core/proxy-service
-- **i18n**: @wxt-dev/i18n with YAML files (EN, DE, ES, FR, IT, NL, PT)
-- **TypeScript**: Strict mode enabled
+- **Communication**: @webext-core/proxy-service 2.0.0
+- **i18n**: @wxt-dev/i18n with YAML files (28 languages)
+- **TypeScript**: 5.9.3, Strict mode enabled
+- **Package Manager**: Bun 1.3.4
 - **URL Blocking**: Uses compressed blocklist from hblock.molinero.dev/hosts
 - **Real-time Scanning**: Monitors navigation and blocks malicious URLs
 - **Cross-browser Support**: Manifest V3 compatible with Chrome and Firefox
 - **Internationalization**: Multi-language support (28 languages)
 - **Onboarding**: Wizard-based setup for new users
+- **Fraud Detection**: Heuristic-based script analysis with tiered scanning
 
 ## Browser Permissions
 
