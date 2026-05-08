@@ -4,12 +4,12 @@ Instructions for AI coding agents working on the CyberGrandpa cross-browser exte
 
 ## Project Overview
 
-Cross-browser anti-fraud web extension that blocks malicious URLs using a distributed blocklist system. Built with WXT 0.20.11, Svelte 5.39.11, and TypeScript in strict mode.
+Cross-browser anti-fraud web extension that blocks malicious URLs using a distributed blocklist system. Built with WXT 0.20.15, Svelte 5.50.1, and TypeScript in strict mode.
 
 ## Stack
 
-- **Framework**: WXT 0.20.11 (Web Extension Framework)
-- **Frontend**: Svelte 5.39.11 with runes (`$state`, `$derived`, `$effect`)
+- **Framework**: WXT 0.20.15 (Web Extension Framework)
+- **Frontend**: Svelte 5.50.1 with runes (`$state`, `$derived`, `$effect`)
 - **Styling**: SASS/SCSS, PostCSS with rem-to-px
 - **Database**: LokiJS (in-memory)
 - **Communication**: @webext-core/proxy-service
@@ -175,8 +175,9 @@ const result = await urlService.seek('https://example.com');
 
 This project uses the latest Windsurf documentation structure:
 
-- **`.windsurf/AGENTS.md`**: Root fallback instructions
-- **`.windsurf/rules/`**: Cross-cutting rules with frontmatter
+- **`AGENTS.md`**: Root fallback instructions for all AI assistants
+- **`.cursorrules`**: Cursor IDE specific rules with detailed patterns
+- **`CLAUDE.md`**: Claude Code comprehensive guidance
   - `global.md` - Development commands and workflows (always on)
   - `security.md` - Security best practices
   - `performance.md` - Performance guidelines

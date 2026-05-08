@@ -23,7 +23,7 @@
     "@types/chrome": "0.1.36",
     "@types/lokijs": "^1.5.14",
     "@typescript-eslint/parser": "^8.55.0",
-    "@webext-core/proxy-service": "^2.0.0",
+    "@webext-core/proxy-service": "^1.2.1",
     "@wxt-dev/i18n": "^0.2.4",
     "@wxt-dev/module-svelte": "^2.0.4",
     "autoprefixer": "^10.4.24",

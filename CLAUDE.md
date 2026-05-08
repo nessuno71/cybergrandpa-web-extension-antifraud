@@ -20,8 +20,9 @@ Cross-browser anti-fraud web extension built with WXT framework and Svelte 5. Bl
 
 This project uses the latest Windsurf documentation structure with AGENTS.md files:
 
-- **`.windsurf/AGENTS.md`**: Root fallback instructions for Windsurf
-- **`.windsurf/rules/`**: Cross-cutting rules with frontmatter
+- **`AGENTS.md`**: Root fallback instructions for all AI assistants
+- **`.cursorrules`**: Cursor IDE specific rules with detailed patterns
+- **`CLAUDE.md`**: Claude Code comprehensive guidance
   - `global.md` - Development commands and workflows (always on)
   - `security.md` - Security best practices
   - `performance.md` - Performance guidelines
@@ -108,17 +109,6 @@ The extension uses WXT's entrypoint system:
 - Creates typed stores using `createStore()` wrapper
 - Stores: `storeProtectionEnabled`, `storeRealtimeEnabled`, `storeScanning`, `storeOnBoardingCompleted`, etc.
 - Uses WXT storage with `local:` or `sync:` prefixes
-
-**Fraud Detector (`src/libs/fraud-detector/`)**: Modular script analysis library
-
-- `types.ts` - All interfaces, enums, and types including `ScanLevel` and `ThreatCategory`
-- `patterns.ts` - Weighted regex patterns with categories and scan level tags
-- `extractor.ts` - DOM script extraction utilities
-- `analyzer.ts` - Pattern matching and entropy calculation
-- `reporter.ts` - Report generation and risk assessment
-- `scanner.ts` - Orchestrator with `scanLight()` and `scanDeep()` methods
-- `index.ts` - Public barrel exports
-- Supports tiered scanning: light (inline only) and deep (includes external scripts)
 
 ### Configuration (`src/config.ts`)
 

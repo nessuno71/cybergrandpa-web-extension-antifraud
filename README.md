@@ -5,8 +5,8 @@
 A powerful cross-browser web extension that provides real-time protection against malicious URLs using a distributed blocklist system. Built with modern web technologies and designed for maximum performance and cross-browser compatibility.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![WXT](https://img.shields.io/badge/WXT-0.20.11-blue.svg)](https://wxt.dev/)
-[![Svelte](https://img.shields.io/badge/Svelte-5.39.11-orange.svg)](https://svelte.dev/)
+[![WXT](https://img.shields.io/badge/WXT-0.20.15-blue.svg)](https://wxt.dev/)
+[![Svelte](https://img.shields.io/badge/Svelte-5.50.1-orange.svg)](https://svelte.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Strict-blue.svg)](https://www.typescriptlang.org/)
 
 ## ✨ Features
@@ -23,8 +23,8 @@ A powerful cross-browser web extension that provides real-time protection agains
 
 ## 🛠️ Technology Stack
 
-- **Framework**: [WXT 0.20.11](https://wxt.dev/) - Modern web extension framework
-- **Frontend**: [Svelte 5.39.11](https://svelte.dev/) - Reactive UI with runes syntax
+- **Framework**: [WXT 0.20.15](https://wxt.dev/) - Modern web extension framework
+- **Frontend**: [Svelte 5.50.1](https://svelte.dev/) - Reactive UI with runes syntax
 - **Styling**: SASS/SCSS with modular architecture + PostCSS (rem-to-px conversion)
 - **Database**: [LokiJS](https://github.com/techfort/LokiJS) - In-memory URL storage
 - **Communication**: [@webext-core/proxy-service](https://webext-core.aklinker1.io/guide/proxy-service.html) - Cross-context messaging
@@ -136,7 +136,6 @@ cybergrandpa-cross-browser-extension/
 │   ├── locales/                  # i18n YAML files (28 languages)
 │   └── styles/                   # Global SCSS styles
 ├── .cursorrules                  # Cursor IDE AI rules
-├── .windsurfrules                # Windsurf editor AI rules
 ├── AGENTS.md                     # Universal AI agent instructions
 ├── CLAUDE.md                     # Claude Code guidance
 ├── wxt.config.ts                 # WXT configuration
@@ -188,7 +187,7 @@ This project includes comprehensive AI instruction files to enhance development 
   - Store patterns, message passing, and styling guidelines
   - Cursor-specific inline code generation tips
 
-- **`.windsurfrules`** - Windsurf editor specific rules
+- **`AGENTS.md`** - Universal AI agent instructions for all assistants
   - Architecture guidelines and development workflow
   - Cross-browser compatibility patterns
 

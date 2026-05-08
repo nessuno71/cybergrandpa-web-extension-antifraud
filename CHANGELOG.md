@@ -26,22 +26,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.0.3] - 2025-11-23
 
-### Changed 2
+### Changed (v0.0.3)
 
 - Moved public assets from src/public to public directory
 - Updated web accessible resources configuration
 - Upgraded bun package manager from 1.1.0 to 1.2.15
 
-### Fixed
+### Fixed (v0.0.3)
 
 - Added type imports and handle optional tab properties in popup scanning
 - Enhanced type safety in logo component
 - Improved type handling in compress-readable-stream utility
 - Updated import path for ContentScriptContext
 
-### Documentation
+### Documentation (v0.0.3)
 
-- Renamed .cursorrules to .windsurfrules
+- Removed .windsurfrules and consolidated AI instruction files
 - Removed formatting rules from configuration
 - Enhanced internationalization support with new localization files
 - Added development notes for CyberGrandpa AntiFraud extension
@@ -85,7 +85,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.0.1] - Initial Release
 
-### Added 2
+### Added (v0.0.1)
 
 - Initial project setup with WXT framework
 - Svelte 5 with runes syntax

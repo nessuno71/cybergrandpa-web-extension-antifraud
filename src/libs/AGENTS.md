@@ -57,18 +57,6 @@ await urlService.count();
 2. **Blocking**: `initWebBlocking()` listens to `webNavigation.onBeforeNavigate` → checks URL via `urlService.seek()` → closes tab if blocked
 3. **Communication**: `@webext-core/proxy-service` exposes `urlService` to all contexts → messages forwarded via `forwardMessageToCss()`
 
-## Fraud Detector Library (`fraud-detector/`)
-
-Modular fraud detection with tiered scanning:
-
-- `types.ts` - All interfaces, enums, and types
-- `patterns.ts` - Weighted regex patterns with categories
-- `extractor.ts` - DOM script extraction utilities
-- `analyzer.ts` - Pattern matching and entropy calculation
-- `reporter.ts` - Report generation and risk assessment
-- `scanner.ts` - Orchestrator with light/deep scan modes
-- `index.ts` - Public barrel exports
-
 ## Storage Strategy
 
 - Use WXT storage API with local storage
