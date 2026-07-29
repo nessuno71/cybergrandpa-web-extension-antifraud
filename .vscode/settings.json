@@ -1,21 +1,28 @@
 {
-  "eslint.validate": ["javascript", "svelte"],
+  "[svelte]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit",
+      "source.organizeLinkDefinitions": "explicit",
+      "source.sortImports": "explicit"
+    },
+    "editor.defaultFormatter": "svelte.svelte-vscode",
+    "editor.formatOnSave": true
+  },
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit",
+    "source.organizeLinkDefinitions": "explicit",
+    "source.sortImports": "explicit"
+  },
   "editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
-  "editor.formatOnType": false, // required
   "editor.formatOnPaste": true, // optional
   "editor.formatOnSave": true, // optional
   "editor.formatOnSaveMode": "file", // required to format on save
-  "[svelte]": {
-    "editor.defaultFormatter": "svelte.svelte-vscode",
-    "editor.codeActionsOnSave": {
-      "source.sortImports": "explicit",
-      "source.organizeImports": "explicit",
-      "source.organizeLinkDefinitions": "explicit"
-    }
-  },
-  "editor.codeActionsOnSave": {
-    "source.sortImports": "explicit",
-    "source.organizeImports": "explicit",
-    "source.organizeLinkDefinitions": "explicit"
+  "editor.formatOnType": false, // required
+  "eslint.validate": [
+    "javascript",
+    "svelte"
+  ],
+  "[typescript]": {
+    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
   }
 }

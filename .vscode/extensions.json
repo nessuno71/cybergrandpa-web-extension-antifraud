@@ -5,6 +5,7 @@
     "esbenp.prettier-vscode",
     "bradlc.vscode-tailwindcss",
     "csstools.postcss",
-    "lokalise.i18n-ally"
+    "lokalise.i18n-ally",
+    "codeandstuff.package-json-upgrade"
   ]
 }
