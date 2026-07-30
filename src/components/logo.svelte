@@ -3,6 +3,7 @@
 
   let { size = 128, alt = '' }: LogoProps = $props();
 
+  // svelte-ignore state_referenced_locally
   const src = browser.runtime.getURL(`/icon/${size}.png` as never);
 </script>
 
