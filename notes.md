@@ -98,7 +98,7 @@ Reference: [WXT Svelte Custom Store Example](https://github.com/wxt-dev/examples
 
 The extension uses the following URL for the blocklist:
 
-```
+```txt
 https://hblock.molinero.dev/hosts
 ```
 
@@ -215,7 +215,7 @@ async function example() {
 
 ### SSH Recovery
 
-```
+```txt
 Starting additional sshd
 
 To make recovery in case of failure easier, an additional sshd will

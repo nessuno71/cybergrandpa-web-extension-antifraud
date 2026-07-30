@@ -1,7 +1,10 @@
 import { convertReadableStreamToString, createStore, decompressReadableStream, getArrayFromString } from '@/utils';
 import { logger } from '@/utils/logger';
 import type { UrlService } from '@/utils/types';
-import { defineProxyService } from '@webext-core/proxy-service';
+import { createProxyService, registerService } from '@webext-core/proxy-service';
+import type { ProxyService } from '@webext-core/proxy-service';
+
+const SERVICE_KEY = 'url-service';
 
 const createUrlService = (storageKey: StorageItemKey): UrlService => {
   const urlsDb = createStore<string | null>(null, storageKey);
@@ -57,4 +60,19 @@ const createUrlService = (storageKey: StorageItemKey): UrlService => {
   };
 };
 
-export const [registerUrlService, getUrlService] = defineProxyService('url-service', createUrlService);
+/**
+ * Register the real service in the background script.
+ * Replaces the old `defineProxyService` tuple [register, get] pattern.
+ */
+export const registerUrlService = (storageKey: StorageItemKey): UrlService => {
+  const realService = createUrlService(storageKey);
+  registerService(SERVICE_KEY, realService);
+  return realService;
+};
+
+/**
+ * Get a proxy to the service for use in content scripts / popups / options.
+ */
+export const getUrlService = (): ProxyService<UrlService> => createProxyService<UrlService>(SERVICE_KEY);
+
+
