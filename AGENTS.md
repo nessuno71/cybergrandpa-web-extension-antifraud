@@ -40,7 +40,7 @@ bun postinstall      # Prepare WXT (run after dependency changes)
 
 ## Project Structure
 
-```
+```txt
 src/
 ├── entrypoints/           # WXT entry points
 │   ├── background.ts      # Service worker (registers urlService, handles lifecycle)
