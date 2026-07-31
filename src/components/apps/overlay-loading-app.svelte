@@ -1,7 +1,7 @@
 <script lang="ts">
   import Modal from '@/components/modal.svelte';
-  import { logger } from '@/utils/logger';
   import { getUrlService } from '@/libs/urls-service';
+  import { logger } from '@/utils/logger';
 
   let loader = $state(true);
   let hasIssues = $state(false);
@@ -35,7 +35,7 @@
 
 <style lang="scss">
   :global(body) {
-    overflow: hidden;
+    // overflow: hidden;
     background-image: none !important;
     background-color: transparent !important;
   }
