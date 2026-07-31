@@ -9,10 +9,10 @@ import { bootstrapApp } from './bootstrap-app';
 export const createUi = (name: string, ctx: ContentScriptContext) => {
   return createShadowRootUi(ctx, {
     name: `${APP_NAME}-${name}`,
-    position: 'modal',
-    zIndex: 99999999,
+    position: 'overlay',
+    // zIndex: 99999999,
     anchor: 'body',
-    append: 'first',
+    append: 'after',
     onMount: (container) => {
       const svelteApp = apps[pascalCase(name)];
 

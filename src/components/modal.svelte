@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { fade } from 'svelte/transition';
-  import { Jumper } from 'svelte-loading-spinners';
   import { type ModalProps } from '@/utils';
+  import { Jumper } from 'svelte-loading-spinners';
+  import { fade } from 'svelte/transition';
   import UiMessage from './ui-message.svelte';
 
   const defaultModalOnClose = () => {
@@ -53,7 +53,7 @@
 
 <style lang="scss">
   .modal {
-    z-index: 1;
+    z-index: 9999999999999999;
     position: fixed;
     margin: 0 auto;
     top: 0;
