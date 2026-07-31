@@ -7,11 +7,11 @@ export const getActiveTab = async () => {
 export const getTabId = async () => {
   const tab = await getActiveTab();
 
-  return tab.id;
+  return tab?.id;
 };
 
 export const getTabUrl = async () => {
   const tab = await getActiveTab();
 
-  return tab.url;
+  return tab?.url;
 };

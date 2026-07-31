@@ -16,6 +16,10 @@ export const createUi = (name: string, ctx: ContentScriptContext) => {
     onMount: (container) => {
       const svelteApp = apps[pascalCase(name)];
 
+      if (!svelteApp) {
+        throw new Error(`No app registered for "${name}"`);
+      }
+
       return bootstrapApp(svelteApp, container);
     },
     onRemove: (app) => {
