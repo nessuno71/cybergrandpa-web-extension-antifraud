@@ -39,12 +39,16 @@ The extension uses WXT's entrypoint system:
 
 ## Message Handling Patterns
 
+Always type `_sender` using WXT's cross-browser `Browser` namespace (`import type { Browser } from 'wxt/browser'`), never the global `chrome.*` namespace directly — see [Extension APIs docs](https://wxt.dev/guide/essentials/extension-apis.html#accessing-types).
+
 ### Background Script Message Handler
 
 ```typescript
+import type { Browser } from 'wxt/browser';
+
 const onMessageHandler = async (
   request: globalThis.SendMessageParams,
-  _sender: chrome.runtime.MessageSender,
+  _sender: Browser.runtime.MessageSender,
   sendResponse: (response: unknown) => void
 ) => {
   // Handle specific message types
@@ -63,9 +67,11 @@ const onMessageHandler = async (
 ### Content Script Message Handler
 
 ```typescript
+import type { Browser } from 'wxt/browser';
+
 const addListenerHandler = (
   request: SendMessageParams,
-  _sender: chrome.runtime.MessageSender,
+  _sender: Browser.runtime.MessageSender,
   sendResponse: (response: string) => void
 ) => {
   if (request.type === 'scanPage') {

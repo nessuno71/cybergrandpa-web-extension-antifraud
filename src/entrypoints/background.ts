@@ -5,6 +5,7 @@ import { registerUrlService } from '@/libs/urls-service';
 import { initWebBlocking } from '@/libs/web-blocking';
 import { forwardMessageToCss } from '@/utils';
 import { logger } from '@/utils/logger';
+import type { Browser } from 'wxt/browser';
 
 // Register proxy-service so other JS context's can get or insert data
 const urlService = registerUrlService(STORAGE_DB_URLS);
@@ -30,9 +31,9 @@ const onInstalledHandler = async ({ reason }: { reason: string }) => {
 
 const onMessageHandler = async (
   request: globalThis.SendMessageParams,
-  _sender: chrome.runtime.MessageSender,
+  _sender: Browser.runtime.MessageSender,
   sendResponse: (
-    arg0: chrome.scripting.InjectionResult<unknown>[] | { tab: number | undefined; response: unknown }[]
+    arg0: Browser.scripting.InjectionResult<unknown>[] | { tab: number | undefined; response: unknown }[]
   ) => void
 ) => {
   if (request.tabId) {

@@ -1,7 +1,8 @@
 import '@/styles/style.scss';
 import { ENV_APP_VERSION, type SendMessageParams, getLog } from '@/utils';
-import { logger } from '@/utils/logger';
 import { createUi } from '@/utils/create-ui';
+import { logger } from '@/utils/logger';
+import type { Browser } from 'wxt/browser';
 import { ContentScriptContext } from 'wxt/utils/content-script-context';
 
 const mainContentScript = async (ctx: ContentScriptContext) => {
@@ -18,7 +19,7 @@ const mainContentScript = async (ctx: ContentScriptContext) => {
 
   const addListenerHandler = (
     request: SendMessageParams,
-    _sender: chrome.runtime.MessageSender,
+    _sender: Browser.runtime.MessageSender,
     sendResponse: (response: string) => void
   ) => {
     if (ui && request.type === 'scanPage') {
