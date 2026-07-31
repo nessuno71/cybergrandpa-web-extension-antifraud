@@ -11,9 +11,12 @@
   const onCloseHandler = async () => {
     defaultModalOnClose();
 
-    setTimeout(() => {
-      onClose();
-    }, 500);
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        onClose();
+        resolve(true);
+      }, 500);
+    });
   };
 
   let { show = false, autoShow = false, children, onClose = defaultModalOnClose, loader, logo }: ModalProps = $props();
@@ -21,11 +24,13 @@
   let t = i18n.t;
 
   $effect(() => {
-    if (autoShow) {
-      setTimeout(() => {
-        show = true;
-      }, 100);
-    }
+    onCloseHandler().then(() => {
+      if (autoShow) {
+        setTimeout(() => {
+          show = true;
+        }, 100);
+      }
+    });
   });
 </script>
 
