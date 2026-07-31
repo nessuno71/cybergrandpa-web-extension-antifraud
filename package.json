@@ -17,6 +17,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-svelte": "^3.22.0",
     "globals": "^17.8.0",
+    "husky": "^9.1.7",
     "lint-staged": "^17.3.0",
     "lokijs": "^1.5.12",
     "nanoid": "^6.0.0",
@@ -35,6 +36,9 @@
     "webext-base-css": "^2.1.0",
     "wxt": "^0.21.2"
   },
+  "lint-staged": {
+    "*": "bun run lint"
+  },
   "name": "cybergrandpa-cross-browser-extension-antifraud",
   "scripts": {
     "build": "wxt build",
@@ -46,6 +50,7 @@
     "format": "prettier --write ./src",
     "lint": "prettier --check ./src && eslint .",
     "postinstall": "wxt prepare",
+    "prepare": "husky",
     "zip": "wxt zip",
     "zip:firefox": "wxt zip -b firefox"
   },

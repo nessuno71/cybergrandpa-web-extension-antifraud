@@ -74,5 +74,3 @@ export const registerUrlService = (storageKey: StorageItemKey): UrlService => {
  * Get a proxy to the service for use in content scripts / popups / options.
  */
 export const getUrlService = (): ProxyService<UrlService> => createProxyService<UrlService>(SERVICE_KEY);
-
-
