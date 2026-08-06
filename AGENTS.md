@@ -45,7 +45,6 @@ src/
 ├── entrypoints/           # WXT entry points
 │   ├── background.ts      # Service worker (registers urlService, handles lifecycle)
 │   ├── content.ts         # Page scanning and UI injection
-│   ├── close.content.ts   # Tab closing for blocked URLs
 │   ├── popup/             # Browser action popup (HTML + Svelte)
 │   ├── options/           # Settings page (HTML + Svelte)
 │   └── wizard/            # Onboarding wizard (HTML + Svelte)

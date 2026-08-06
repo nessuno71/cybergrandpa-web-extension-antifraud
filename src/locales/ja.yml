@@ -53,3 +53,4 @@ overlay:
   title: ページ分析の結果
   falsyMessage: 問題は検出されませんでした。
   truthyMessage: いくつかの問題が検出されました。
+  confirmClose: このページは危険な可能性があります。閉じますか？

@@ -72,8 +72,6 @@ The extension uses WXT's entrypoint system:
 
 - **`content.ts`** - Content script for page scanning and UI injection
 
-- **`close.content.ts`** - Content script for closing/blocking malicious tabs
-
 - **`popup/`** - Browser action popup (index.html + main.ts + popup.svelte)
 
 - **`options/`** - Extension settings page (index.html + main.ts + options.svelte)

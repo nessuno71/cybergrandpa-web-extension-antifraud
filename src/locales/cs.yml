@@ -53,3 +53,4 @@ overlay:
   title: Výsledky analýzy stránky
   falsyMessage: Nebyly zjištěny žádné problémy.
   truthyMessage: Byly zjištěny některé problémy.
+  confirmClose: Tato stránka může být nebezpečná. Chcete ji zavřít?

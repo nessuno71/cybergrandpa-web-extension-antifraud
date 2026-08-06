@@ -53,3 +53,4 @@ overlay:
   title: Resultater af sideanalyse
   falsyMessage: Ingen problemer blev opdaget.
   truthyMessage: Nogle problemer blev opdaget.
+  confirmClose: Denne side kan være farlig. Vil du lukke den?

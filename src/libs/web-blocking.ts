@@ -20,22 +20,30 @@ export const initWebBlocking = () => {
     logger.debug('URL:', isUrlBlocked, details.url);
 
     if (isUrlBlocked) {
-      const response = await browser.scripting.executeScript({
+      // Compose the confirm message here (i18n is available in background context)
+      // and pass it to the injected func — the func is stringified and can't
+      // access imports.
+      const confirmMsg = `${i18n.t('overlay.confirmClose')}\n\n${details.url}`;
+
+      // Inject into ISOLATED world (default) — NOT 'MAIN' — so window.confirm
+      // works and we get the return value back. The actual tab removal happens
+      // back here in the background script where `browser` is in scope.
+      const results = await browser.scripting.executeScript({
         target: { tabId: details.tabId },
-        world: 'MAIN',
-        // files: ['/content-scripts/close.js'],
-        //   injectImmediately: true,
-        args: [details.tabId],
-        func: (tabId) => {
-          // Note: logger not available in injected func context
-          browser.tabs.remove(tabId);
+        injectImmediately: true,
+        args: [confirmMsg],
+        func: (msg: string) => {
+          return window.confirm(msg);
         },
       });
 
-      logger.info('URL blocked:', response);
+      const wasClosed = results?.[0]?.result === true;
+      logger.info('URL blocked, confirmed:', wasClosed, details.url);
 
-      // Tell the user why their tab just disappeared (if alerts are opted into)
-      notifyBlockedUrl(details.url);
+      if (wasClosed) {
+        await browser.tabs.remove(details.tabId);
+        notifyBlockedUrl(details.url);
+      }
     }
   };
 
