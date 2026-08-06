@@ -1,4 +1,4 @@
-import { storeRealtimeEnabled } from '@/libs/store';
+import { storeProtectionEnabled, storeRealtimeEnabled } from '@/libs/store';
 import { getUrlService } from '@/libs/urls-service';
 import '@/styles/style.scss';
 import { ENV_APP_VERSION, type SendMessageParams, getLog, isIgnoreUrlMatch } from '@/utils';
@@ -32,9 +32,12 @@ const mainContentScript = async (ctx: ContentScriptContext) => {
   const runRealtimeScan = async (url: string) => {
     if (isIgnoreUrlMatch(url)) return;
 
-    const isRealtimeEnabled = await storeRealtimeEnabled.ready();
+    const [isProtectionEnabled, isRealtimeEnabled] = await Promise.all([
+      storeProtectionEnabled.ready(),
+      storeRealtimeEnabled.ready(),
+    ]);
 
-    if (!isRealtimeEnabled) return;
+    if (!isProtectionEnabled || !isRealtimeEnabled) return;
 
     const isMalicious = await getUrlService().seek(url);
 

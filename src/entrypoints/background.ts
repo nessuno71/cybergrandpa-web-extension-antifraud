@@ -1,4 +1,5 @@
 import { STORAGE_DB_URLS } from '@/config';
+import { initBadge } from '@/libs/badge';
 import { initDb } from '@/libs/init-db';
 import { storeOnBoardingCompleted, storeScanning } from '@/libs/store';
 import { registerUrlService } from '@/libs/urls-service';
@@ -84,6 +85,9 @@ const main = () => {
 
   // Initialize web blocking
   initWebBlocking();
+
+  // Keep the toolbar badge in sync with the protection state
+  initBadge();
 };
 
 export default defineBackground({

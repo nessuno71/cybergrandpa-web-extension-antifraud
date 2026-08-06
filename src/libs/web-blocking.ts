@@ -1,6 +1,8 @@
 import { CONFIG_LOCAL_URL_PATTERN } from '@/config';
 import { logger } from '@/utils/logger';
 import { browser, type Browser } from 'wxt/browser';
+import { notifyBlockedUrl } from './notify';
+import { storeProtectionEnabled } from './store';
 import { getUrlService } from './urls-service';
 
 export const initWebBlocking = () => {
@@ -8,6 +10,9 @@ export const initWebBlocking = () => {
 
   const closeTabIfBlocked = async (details: Browser.webNavigation.WebNavigationBaseCallbackDetails) => {
     if (details.frameType !== 'outermost_frame') return;
+
+    // Read on every navigation so toggling protection takes effect immediately
+    if (!(await storeProtectionEnabled.ready())) return;
 
     // For test: ---adbs186282--54223580950k.gbc.criteo.com
     const isUrlBlocked = await urlService.seek(details.url);
@@ -28,6 +33,9 @@ export const initWebBlocking = () => {
       });
 
       logger.info('URL blocked:', response);
+
+      // Tell the user why their tab just disappeared (if alerts are opted into)
+      notifyBlockedUrl(details.url);
     }
   };
 
