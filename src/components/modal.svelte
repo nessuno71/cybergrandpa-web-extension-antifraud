@@ -24,13 +24,13 @@
   let t = i18n.t;
 
   $effect(() => {
-    onCloseHandler().then(() => {
-      if (autoShow) {
-        setTimeout(() => {
-          show = true;
-        }, 100);
-      }
-    });
+    if (!autoShow) return;
+
+    const timeout = setTimeout(() => {
+      show = true;
+    }, 100);
+
+    return () => clearTimeout(timeout);
   });
 </script>
 

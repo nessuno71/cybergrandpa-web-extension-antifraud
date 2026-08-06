@@ -7,8 +7,11 @@ import { logger } from '@/utils/logger';
 import type { Browser } from 'wxt/browser';
 import { ContentScriptContext } from 'wxt/utils/content-script-context';
 
+const REALTIME_SCAN_DEBOUNCE_MS = 150;
+
 const mainContentScript = async (ctx: ContentScriptContext) => {
   let ui: Awaited<ReturnType<typeof createUi>> | undefined;
+  let scanTimeoutId: ReturnType<typeof setTimeout> | undefined;
 
   // Mutable so we can flip `immediate` between mounts without recreating the UI
   const uiProps = {
@@ -41,6 +44,12 @@ const mainContentScript = async (ctx: ContentScriptContext) => {
     (await getUi()).mount();
   };
 
+  // Debounced so rapid SPA route churn doesn't fire overlapping scans
+  const scheduleRealtimeScan = (url: string) => {
+    clearTimeout(scanTimeoutId);
+    scanTimeoutId = setTimeout(() => runRealtimeScan(url), REALTIME_SCAN_DEBOUNCE_MS);
+  };
+
   const addListenerHandler = (
     request: SendMessageParams,
     _sender: Browser.runtime.MessageSender,
@@ -50,7 +59,9 @@ const mainContentScript = async (ctx: ContentScriptContext) => {
       // Returning a promise will send a response back to the sender
       if (request.command === 'open') {
         uiProps.immediate = false;
-        getUi().then((instance) => instance.mount());
+        getUi()
+          .then((instance) => instance.mount())
+          .catch((error) => logger.error('Failed to open scan UI:', error));
       }
 
       if (request.command === 'close' || request.command === 'destroy') {
@@ -69,13 +80,14 @@ const mainContentScript = async (ctx: ContentScriptContext) => {
     ctx.addEventListener(window, 'beforeunload', () => {
       browser.runtime.onMessage.removeListener(addListenerHandler);
 
+      clearTimeout(scanTimeoutId);
       ui?.remove();
       ctx.abort();
     });
 
     // Re-run the scan whenever the URL changes without a full page reload (SPAs)
     ctx.addEventListener(window, 'wxt:locationchange', ({ newUrl }) => {
-      runRealtimeScan(newUrl.toString());
+      scheduleRealtimeScan(newUrl.toString());
     });
   };
 
