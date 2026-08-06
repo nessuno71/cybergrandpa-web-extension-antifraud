@@ -53,3 +53,4 @@ overlay:
   title: 页面分析结果
   falsyMessage: 未检测到问题。
   truthyMessage: 检测到一些问题。
+  confirmClose: 此页面可能危险。您要关闭它吗？

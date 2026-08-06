@@ -53,3 +53,4 @@ overlay:
   title: Sivun analyysin tulokset
   falsyMessage: Ongelmia ei havaittu.
   truthyMessage: Joitain ongelmia havaittu.
+  confirmClose: Tämä sivu voi olla vaarallinen. Haluatko sulkea sen?

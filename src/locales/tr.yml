@@ -53,3 +53,4 @@ overlay:
   title: Sayfa analiz sonuçları
   falsyMessage: Hiçbir sorun tespit edilmedi.
   truthyMessage: Bazı sorunlar tespit edildi.
+  confirmClose: Bu sayfa tehlikeli olabilir. Kapatmak istiyor musunuz?

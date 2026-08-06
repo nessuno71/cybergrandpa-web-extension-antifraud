@@ -25,10 +25,6 @@ The extension uses WXT's entrypoint system:
   - `close`/`destroy` commands just remove the UI (`ui.remove()`) — they must never call `ctx.abort()`,
     since that would tear down real-time protection for the page, not just the overlay
 
-- **`close.content.ts`** - Content script for closing/blocking malicious tabs:
-  - Immediately closes tabs flagged as malicious
-  - Minimal footprint for fast execution
-
 - **`popup/`** - Browser action popup (index.html + main.ts + popup.svelte):
   - Shows protection status
   - Provides manual scan trigger

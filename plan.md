@@ -1,8 +1,8 @@
 # CyberGrandpa Anti-Fraud Extension - Project Plan
 
-**Version:** 0.0.3
+**Version:** 0.0.4
 **Status:** Beta Development
-**Last Updated:** 2025-11-23
+**Last Updated:** 2025-08-07
 
 ## Executive Summary
 
@@ -16,50 +16,64 @@ This document outlines the development roadmap for the CyberGrandpa Anti-Fraud w
    - Compressed blocklist storage (gzip + base64)
    - Automatic sync every 11 hours from hblock.molinero.dev
    - Cross-context proxy service architecture
-   - webNavigation-based blocking
+   - webNavigation-based blocking with user confirmation dialog
+   - SPA route-change detection via `onHistoryStateUpdated`
+   - `storeLatestUpdate` stamped on successful sync (was hardcoded)
 
 2. **User Interface Components**
    - Popup with protection status and manual scanning
    - Options page for settings management
    - Onboarding wizard for first-run experience
    - 11 reusable Svelte 5 components (all using runes syntax)
+   - Modal overlay only shown when actual threats detected
+   - Toolbar badge reflecting protection state (MV3 action / MV2 browserAction)
 
 3. **Internationalization**
    - 28 languages fully supported (exceeds original 7-language spec)
    - YAML-based locale files
    - Browser-specific help screenshots (6 languages)
+   - `overlay.confirmClose` key added to all 28 locales for block dialog
 
 4. **Cross-Browser Support**
    - Manifest V3 compliant
    - Firefox-specific build pipeline
    - All required permissions properly configured
+   - Feature-detects `browser.action` vs `browser.browserAction`
 
 5. **Storage & State Management**
    - WXT storage API integration
    - 8 persistent storage items
    - Svelte store bindings
+   - Protection toggle (`storeProtectionEnabled`) gates blocking + real-time scan
+   - Alerts toggle (`storeAlertsEnabled`) gates block notifications
+
+6. **Real-time Protection**
+   - Content script auto-injects on every page (static manifest registration)
+   - SPA route changes detected via WXT `wxt:locationchange` event
+   - Manual "Scan Page" button sends messages to already-present content script
+   - Gated on both `storeProtectionEnabled` and `storeRealtimeEnabled`
+
+7. **Block Alerts**
+   - `notify.ts` sends browser notification when a tab is blocked
+   - Gated on `storeAlertsEnabled` + `notifications` permission
+   - Notification text composed from existing i18n keys (all 30 locales correct)
+
+8. **Code Quality**
+   - `logger.ts` utility gates all logging on dev mode (no console.log in production)
+   - Svelte 5 `state_referenced_locally` warnings resolved in button/radio components
+   - Dead code removed: `close.content.ts` and `stopHostPageLoading` handler
 
 ### ⚠️ Incomplete/Problematic Features
 
-1. **Close Content Script** (`src/entrypoints/close.content.ts`)
-   - **Status:** 90% commented out, non-functional
-   - **Issue:** Critical security feature disabled
-   - **Action Required:** Complete implementation or remove entirely
-
-2. **Page Scanning Overlay** (`src/components/apps/overlay-loading-app.svelte`)
-   - **Status:** Placeholder/fake implementation
-   - **Issue:** Shows hardcoded "no issues" after 3-second delay
-   - **Action Required:** Implement real scanning or remove feature
-
-3. **Real-time Protection Toggle**
-   - **Status:** UI exists but functionality unclear
-   - **Issue:** Web blocking runs regardless of toggle state
-   - **Action Required:** Clarify purpose or remove as premium placeholder
-
-4. **Tab Blocking Mechanism** (`src/libs/web-blocking.ts`)
-   - **Status:** Working but potentially unreliable
-   - **Issue:** Uses scripting.executeScript which may have timing issues
+1. **Tab Blocking Mechanism** (`src/libs/web-blocking.ts`)
+   - **Status:** Working with user confirm dialog
+   - **Issue:** Uses `scripting.executeScript` which may have timing issues
    - **Action Required:** Consider declarativeNetRequest API for more reliable blocking
+
+2. **`storeNewsEnabled`**
+   - **Status:** Collected by wizard but has no consumers
+   - **Issue:** No data source exists (no feed URL, no backend, no email capture)
+   - **Action Required:** Decide on implementation: in-extension feed, newsletter opt-in, or drop
 
 ### ❌ Missing Features
 
@@ -69,14 +83,12 @@ This document outlines the development roadmap for the CyberGrandpa Anti-Fraud w
    - No automated quality checks
 
 2. **Production Code Quality**
-   - Console.log statements in 9 production files
    - No error tracking/reporting
    - No performance monitoring
 
 3. **Documentation**
    - No API documentation
    - No contribution guidelines
-   - No changelog
    - CLAUDE.md mentions LokiJS but project uses WXT storage
 
 ## Priority Roadmap
@@ -86,17 +98,16 @@ This document outlines the development roadmap for the CyberGrandpa Anti-Fraud w
 **Priority: CRITICAL**
 **Timeline:** Immediate
 
-1. **Fix or Remove Close Content Script**
-   - [ ] Decide: Complete implementation or remove feature
-   - [ ] If keeping: Implement reliable tab closing mechanism
-   - [ ] If removing: Remove file and update manifest
-   - **Files:** `src/entrypoints/close.content.ts`
+1. ~~**Fix or Remove Close Content Script**~~
+   - [x] ~~Decide: Complete implementation or remove feature~~
+   - [x] ~~If keeping: Implement reliable tab closing mechanism~~
+   - [x] ~~If removing: Remove file and update manifest~~
+   - **Done:** Removed `close.content.ts`. Blocking now uses inline `window.confirm` + `chrome.tabs.remove` via `scripting.executeScript` in ISOLATED world.
 
-2. **Fix or Remove Page Scanning**
-   - [ ] Decide: Implement real scanning or remove feature
-   - [ ] If keeping: Scan actual page URLs against blocklist
-   - [ ] If removing: Remove overlay component and popup integration
-   - **Files:** `src/components/apps/overlay-loading-app.svelte`, `src/entrypoints/popup/popup.svelte`
+2. ~~**Fix or Remove Page Scanning**~~
+   - [x] ~~Decide: Implement real scanning or remove feature~~
+   - [x] ~~If keeping: Scan actual page URLs against blocklist~~
+   - **Done:** Real-time scan implemented. Overlay only shows on actual threats. SPA route changes detected via `wxt:locationchange`.
 
 3. **Improve Tab Blocking Reliability**
    - [ ] Research declarativeNetRequest API for URL blocking
@@ -104,11 +115,10 @@ This document outlines the development roadmap for the CyberGrandpa Anti-Fraud w
    - [ ] Add error handling for blocked navigation
    - **Files:** `src/libs/web-blocking.ts`
 
-4. **Remove Debug Code**
-   - [ ] Replace console.log with proper logging utility
-   - [ ] Add development/production environment check
-   - [ ] Implement error reporting service (optional)
-   - **Files:** All 9 files with console.log statements
+4. ~~**Remove Debug Code**~~
+   - [x] ~~Replace console.log with proper logging utility~~
+   - [x] ~~Add development/production environment check~~
+   - **Done:** `logger.ts` utility gates all logging on `import.meta.env.MODE === 'development'`. No raw `console.log` in production code.
 
 ### Phase 2: Testing & Quality (Required for v0.1.0)
 
@@ -216,9 +226,7 @@ This document outlines the development roadmap for the CyberGrandpa Anti-Fraud w
 ### High Priority
 
 1. **Architecture Mismatch:** Documentation mentions LokiJS but code uses WXT storage
-2. **Commented Code:** close.content.ts has 90% of code commented out
-3. **Fake Features:** Page scanning overlay doesn't actually scan
-4. **Console Logs:** 9 files have debug console.log statements
+2. **`storeNewsEnabled`:** Wizard collects this preference but no data source exists
 
 ### Medium Priority
 
@@ -276,20 +284,17 @@ This document outlines the development roadmap for the CyberGrandpa Anti-Fraud w
 ## Next Immediate Steps
 
 1. **Decision Points Required:**
-   - Keep or remove close.content.ts feature?
-   - Keep or remove page scanning feature?
+   - `storeNewsEnabled`: in-extension feed, newsletter opt-in, or drop?
    - Premium features: placeholder or implement?
+   - declarativeNetRequest vs current scripting.executeScript approach?
 
 2. **Quick Wins (Can be done now):**
-   - Remove all console.log statements
-   - Run ESLint and fix warnings
    - Update CLAUDE.md to remove LokiJS mention
-   - Add CHANGELOG.md
+   - Add CHANGELOG.md (partially exists, needs updating)
 
 3. **Foundation Work:**
    - Set up Vitest testing framework
    - Write first unit tests for urls-service.ts
-   - Implement proper logging utility
    - Add CI/CD with GitHub Actions
 
 ## Notes

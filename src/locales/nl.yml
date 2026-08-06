@@ -53,3 +53,4 @@ overlay:
   title: Resultaten van de pagina-analyse
   falsyMessage: Geen problemen gedetecteerd.
   truthyMessage: Enkele problemen gedetecteerd.
+  confirmClose: Deze pagina kan gevaarlijk zijn. Wilt u deze sluiten?

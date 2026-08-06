@@ -53,3 +53,4 @@ overlay:
   title: Rezultati analize stranice
   falsyMessage: Nisu otkriveni problemi.
   truthyMessage: Otkriveni su neki problemi.
+  confirmClose: Ova stranica može biti opasna. Želite li je zatvoriti?

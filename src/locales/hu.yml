@@ -53,3 +53,4 @@ overlay:
   title: Oldal elemzésének eredményei
   falsyMessage: Nem találtunk problémákat.
   truthyMessage: Néhány probléma található.
+  confirmClose: Ez az oldal veszélyes lehet. Bezárja most?

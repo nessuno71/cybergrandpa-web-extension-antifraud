@@ -5,7 +5,6 @@ import { storeOnBoardingCompleted, storeScanning } from '@/libs/store';
 import { registerUrlService } from '@/libs/urls-service';
 import { initWebBlocking } from '@/libs/web-blocking';
 import { forwardMessageToCss } from '@/utils';
-import { logger } from '@/utils/logger';
 import type { Browser } from 'wxt/browser';
 
 // Register proxy-service so other JS context's can get or insert data
@@ -46,17 +45,6 @@ const onMessageHandler = async (
       });
 
       sendResponse(response);
-
-      return true;
-    }
-
-    if (request.type === 'stopHostPageLoading') {
-      const response = await browser.scripting.executeScript({
-        target: { tabId: request.tabId },
-        files: ['/content-scripts/close.js'],
-      });
-
-      logger.debug('stopHostPageLoading response:', response);
 
       return true;
     }

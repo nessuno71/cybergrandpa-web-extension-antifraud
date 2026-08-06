@@ -53,3 +53,4 @@ overlay:
   title: Rezultatele analizei paginii
   falsyMessage: Nu au fost detectate probleme.
   truthyMessage: Au fost detectate unele probleme.
+  confirmClose: Această pagină ar putea fi periculoasă. Doriți să o închideți?

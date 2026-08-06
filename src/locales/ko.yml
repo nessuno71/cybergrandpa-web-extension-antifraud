@@ -53,3 +53,4 @@ overlay:
   title: 페이지 분석 결과
   falsyMessage: 문제가 감지되지 않았습니다.
   truthyMessage: 일부 문제가 감지되었습니다.
+  confirmClose: 이 페이지는 위험할 수 있습니다. 닫으시겠습니까?

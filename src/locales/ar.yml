@@ -53,3 +53,4 @@ overlay:
   title: نتائج تحليل الصفحة
   falsyMessage: لم يتم اكتشاف مشاكل.
   truthyMessage: تم اكتشاف بعض المشاكل.
+  confirmClose: هذه الصفحة قد تكون خطرة. هل تريد إغلاقها؟

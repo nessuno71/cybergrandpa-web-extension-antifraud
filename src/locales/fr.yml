@@ -53,3 +53,4 @@ overlay:
   title: Résultats de l'analyse de la page
   falsyMessage: Aucune anomalie détectée.
   truthyMessage: Anomalies détectées.
+  confirmClose: Cette page peut être dangereuse. Voulez-vous la fermer ?
