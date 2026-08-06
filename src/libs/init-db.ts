@@ -1,6 +1,7 @@
 import { STORAGE_KEY_URLS, STREAM_URL } from '@/config';
 import { checkAlarmState, GetStream, type UrlService } from '@/utils';
 import { logger } from '@/utils/logger';
+import { storeLatestUpdate } from './store';
 
 export const initDb = (urlService: UrlService) => {
   let syncUrlsIsBusy = false;
@@ -14,7 +15,10 @@ export const initDb = (urlService: UrlService) => {
     try {
       const base64string = await new GetStream(STREAM_URL).toBase64String();
 
-      urlService.upsert(base64string);
+      // Surfaced as "Latest Update" in the status panel, so only stamp it on success
+      if (await urlService.upsert(base64string)) {
+        storeLatestUpdate.set(new Date().toLocaleString());
+      }
     } catch (error) {
       logger.error('Failed to sync URL database:', error);
     }
