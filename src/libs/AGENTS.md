@@ -27,10 +27,16 @@ Blocklist sync orchestration:
 
 Real-time URL interception:
 
-- Listens to `webNavigation.onBeforeNavigate` for outermost frames
+- Listens to both `webNavigation.onBeforeNavigate` (full page loads) and
+  `webNavigation.onHistoryStateUpdated` (SPA/`history.pushState` route changes) with a shared handler,
+  for outermost frames only
 - Checks URL against blocklist via `urlService.seek()`
 - Closes tab immediately if URL is blocked
 - Only monitors URLs matching `CONFIG_LOCAL_URL_PATTERN`
+
+Note: this only covers hard-blocking (force-closing the tab). The in-page overlay warning shown to the
+user for real-time protection lives in `content.ts` + `overlay-loading-app.svelte`, since it needs to
+run inside the page itself and reacts to the same SPA navigations via `wxt:locationchange`.
 
 ### Storage (`store.ts`)
 

@@ -6,7 +6,7 @@ import { unmount } from 'svelte';
 import { ContentScriptContext } from 'wxt/utils/content-script-context';
 import { bootstrapApp } from './bootstrap-app';
 
-export const createUi = (name: string, ctx: ContentScriptContext) => {
+export const createUi = (name: string, ctx: ContentScriptContext, props: Record<string, unknown> = {}) => {
   return createShadowRootUi(ctx, {
     name: `${APP_NAME}-${name}`,
     position: 'overlay',
@@ -20,7 +20,7 @@ export const createUi = (name: string, ctx: ContentScriptContext) => {
         throw new Error(`No app registered for "${name}"`);
       }
 
-      return bootstrapApp(svelteApp, container);
+      return bootstrapApp(svelteApp, container, props);
     },
     onRemove: (app) => {
       // Set the scanning state to 0

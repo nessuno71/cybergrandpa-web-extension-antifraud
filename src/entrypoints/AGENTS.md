@@ -14,9 +14,16 @@ The extension uses WXT's entrypoint system:
   - Initializes database (`initDb()`) and web blocking (`initWebBlocking()`)
 
 - **`content.ts`** - Content script for page scanning and UI injection:
-  - Injects overlay UI for scan results
-  - Handles manual scan triggers
-  - Communicates with background script
+  - Statically registered (`matches: ['<all_urls>']`, no `registration: 'runtime'`) so it's
+    auto-injected on every page, not just when manually triggered
+  - Real-time protection: silently checks the page against the blocklist on load and on every
+    `wxt:locationchange` (SPA route change); only mounts the overlay UI if a threat is found and
+    `storeRealtimeEnabled` is on
+  - Manual scans: responds to `{ type: 'scanPage', command: 'open' }` messages (sent by the popup's
+    "Scan Page" button via `browser.tabs.sendMessage`) by mounting the overlay UI immediately, which
+    performs its own check and shows a loader while doing so
+  - `close`/`destroy` commands just remove the UI (`ui.remove()`) — they must never call `ctx.abort()`,
+    since that would tear down real-time protection for the page, not just the overlay
 
 - **`close.content.ts`** - Content script for closing/blocking malicious tabs:
   - Immediately closes tabs flagged as malicious
@@ -82,6 +89,20 @@ const addListenerHandler = (
   }
 };
 ```
+
+### Dealing with SPAs
+
+Content scripts don't re-run on `history.pushState`-based navigation. Use WXT's built-in event to
+react to in-page URL changes instead of polling manually:
+
+```typescript
+ctx.addEventListener(window, 'wxt:locationchange', ({ newUrl }) => {
+  // newUrl is a URL instance
+  runRealtimeScan(newUrl.toString());
+});
+```
+
+See [Dealing with SPAs](https://wxt.dev/guide/essentials/content-scripts.html#dealing-with-spas).
 
 ## Lifecycle Management
 

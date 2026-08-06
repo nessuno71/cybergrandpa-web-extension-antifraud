@@ -35,9 +35,16 @@
       return;
     }
 
-    await sendMessage({ type: 'loadContentScript', tabId: tab.id });
-
     storeScanning.set(String(tab.id));
+
+    try {
+      // The content script is always injected, so message it directly
+      await browser.tabs.sendMessage(tab.id, { type: 'scanPage', command: 'open' });
+    } catch {
+      // Content script isn't present yet (e.g. tab was open before install/update)
+      await sendMessage({ type: 'loadContentScript', tabId: tab.id });
+      await browser.tabs.sendMessage(tab.id, { type: 'scanPage', command: 'open' });
+    }
   };
 
   let t = i18n.t;
