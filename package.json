@@ -45,6 +45,10 @@
     "*": "bun run lint"
   },
   "name": "cybergrandpa-cross-browser-extension-antifraud",
+  "overrides": {
+    "typescript": "6.0.3",
+    "vite": "6.3.6"
+  },
   "scripts": {
     "build": "wxt build",
     "build:firefox": "wxt build -b firefox",
@@ -57,8 +61,8 @@
     "postinstall": "wxt prepare",
     "prepare": "husky",
     "test": "vitest",
-    "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
+    "test:run": "vitest run",
     "zip": "wxt zip",
     "zip:firefox": "wxt zip -b firefox"
   },
