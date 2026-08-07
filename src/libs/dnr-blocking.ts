@@ -8,62 +8,107 @@ import { getUrlService } from './urls-service';
 const DNR_RULE_ID_START = 1;
 
 /**
- * Fetch the Tranco top-1M domain list and intersect it with the blocklist.
- * Returns the top N blocked domains, sorted by Tranco rank (most popular first).
+ * Build a Set of all blocked domains from the in-memory blocklist.
+ * Single bulk read to avoid round-trip overhead and minimize peak heap.
  */
-const getTopBlockedDomains = async (): Promise<string[]> => {
+const buildBlockedSet = async (): Promise<Set<string>> => {
   const urlService = getUrlService();
-
-  // Get all blocked domains from the blocklist
-  // getRows returns a newline-separated string; we fetch in chunks
-  const allBlocked: string[] = [];
-  const chunkSize = 50000;
-  let offset = 0;
   const total = await urlService.count();
+  if (total === 0) return new Set();
 
-  while (offset < total) {
-    const rows = await urlService.getRows(chunkSize, offset);
-    if (!rows) break;
-    allBlocked.push(...rows.split('\n'));
-    offset += chunkSize;
+  const rows = await urlService.getRows(total, 0);
+  if (!rows) return new Set();
+
+  const set = new Set<string>();
+  for (const line of rows.split('\n')) {
+    if (line) set.add(line);
   }
 
-  if (allBlocked.length === 0) return [];
+  return set;
+};
 
-  // Build a Set for O(1) lookup
-  const blockedSet = new Set(allBlocked);
+/**
+ * Stream the Tranco CSV response line-by-line, intersecting against the
+ * blocklist. Returns at most DNR_TOP_DOMAINS_COUNT results, breaking early
+ * to avoid scanning the rest of the 1M-line list once we have enough.
+ */
+const streamTrancoIntersect = async (blockedSet: Set<string>, signal: AbortSignal): Promise<string[]> => {
+  if (blockedSet.size === 0) return [];
 
-  // Fetch Tranco list (CSV: rank,domain per line)
-  const response = await fetch(TRANCO_LIST_URL, { signal: AbortSignal.timeout(30000) });
+  const response = await fetch(TRANCO_LIST_URL, { signal });
 
-  if (!response.ok) {
+  if (!response.ok || !response.body) {
     logger.error('Tranco list fetch failed:', response.status);
     return [];
   }
 
-  const text = await response.text();
-  const trancoDomains = text
-    .split('\n')
-    .map((line) => line.trim())
-    .filter((line) => line && !line.startsWith('#'))
-    .map((line) => {
-      // Format: "rank,domain" — take the domain part
-      const parts = line.split(',');
-      return parts[1]?.trim() || '';
-    })
-    .filter(Boolean);
-
-  // Intersect: keep Tranco domains that are in the blocklist, preserving Tranco order
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
   const topBlocked: string[] = [];
-  for (const domain of trancoDomains) {
-    if (blockedSet.has(domain)) {
-      topBlocked.push(domain);
-      if (topBlocked.length >= DNR_TOP_DOMAINS_COUNT) break;
+
+  let buffer = '';
+  try {
+    while (true) {
+      const { value, done } = await reader.read();
+
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+
+      let newlineAt: number;
+      while ((newlineAt = buffer.indexOf('\n')) !== -1) {
+        const line = buffer.slice(0, newlineAt).trim();
+        buffer = buffer.slice(newlineAt + 1);
+
+        if (line && !line.startsWith('#')) {
+          const parts = line.split(',');
+          const domain = parts[1]?.trim();
+
+          if (domain && blockedSet.has(domain)) {
+            topBlocked.push(domain);
+            if (topBlocked.length >= DNR_TOP_DOMAINS_COUNT) {
+              reader.cancel();
+              return topBlocked;
+            }
+          }
+        }
+      }
     }
+
+    // Flush any trailing line that didn't end with \n
+    const trailing = buffer.trim();
+    if (trailing && !trailing.startsWith('#')) {
+      const parts = trailing.split(',');
+      const domain = parts[1]?.trim();
+
+      if (domain && blockedSet.has(domain) && topBlocked.length < DNR_TOP_DOMAINS_COUNT) {
+        topBlocked.push(domain);
+      }
+    }
+  } finally {
+    reader.cancel().catch(() => undefined);
   }
 
-  logger.info(`DNR: ${topBlocked.length} top blocked domains selected from Tranco intersect`);
   return topBlocked;
+};
+
+/**
+ * Fetch the Tranco top-1M domain list and intersect it with the blocklist.
+ * Returns the top N blocked domains, sorted by Tranco rank (most popular first).
+ */
+const getTopBlockedDomains = async (): Promise<string[]> => {
+  const blockedSet = await buildBlockedSet();
+
+  if (blockedSet.size === 0) return [];
+
+  try {
+    const topDomains = await streamTrancoIntersect(blockedSet, AbortSignal.timeout(30000));
+    logger.info(`DNR: ${topDomains.length} top blocked domains selected from Tranco intersect`);
+    return topDomains;
+  } catch (error) {
+    logger.error('Failed to intersect Tranco with blocklist:', error);
+    return [];
+  }
 };
 
 /**
@@ -76,7 +121,7 @@ const domainToRule = (domain: string, ruleId: number): Browser.declarativeNetReq
     priority: 1,
     action: { type: 'block' },
     condition: {
-      urlFilter: `||${domain}`,
+      urlFilter: `||${domain}^`,
       resourceTypes: ['main_frame', 'sub_frame', 'xmlhttprequest', 'script', 'image', 'stylesheet'],
     },
   };
@@ -121,43 +166,64 @@ export const disableDnrBlocking = async () => {
   }
 };
 
-/**
- * Update DNR rules based on the current blocklist + Tranco ranking.
- * Called after each blocklist sync.
- */
-export const updateDnrBlocking = async () => {
+// Guard against concurrent updates — same pattern as init-db.ts's syncUrlsIsBusy
+let dnrUpdateIsBusy = false;
+
+const runGuarded = async (fn: () => Promise<void>) => {
+  if (dnrUpdateIsBusy) return;
+  dnrUpdateIsBusy = true;
   try {
-    const isProtectionEnabled = await storeProtectionEnabled.ready();
-
-    if (!isProtectionEnabled) {
-      await disableDnrBlocking();
-      return;
-    }
-
-    const topDomains = await getTopBlockedDomains();
-
-    if (topDomains.length === 0) {
-      logger.info('DNR: no top domains to block, skipping rule update');
-      return;
-    }
-
-    await updateDnrRules(topDomains);
-  } catch (error) {
-    logger.error('DNR: failed to update rules:', error);
+    await fn();
+  } finally {
+    dnrUpdateIsBusy = false;
   }
 };
 
 /**
- * Initialize DNR blocking. Listens to protection toggle changes
- * to enable/disable rules dynamically.
+ * Update DNR rules based on the current blocklist + Tranco ranking.
+ * Called after each blocklist sync. Guarded against concurrent calls.
+ */
+export const updateDnrBlocking = () =>
+  runGuarded(async () => {
+    try {
+      const isProtectionEnabled = await storeProtectionEnabled.ready();
+
+      if (!isProtectionEnabled) {
+        await disableDnrBlocking();
+        return;
+      }
+
+      const topDomains = await getTopBlockedDomains();
+
+      if (topDomains.length === 0) {
+        logger.info('DNR: no top domains to block, skipping rule update');
+        return;
+      }
+
+      await updateDnrRules(topDomains);
+    } catch (error) {
+      logger.error('DNR: failed to update rules:', error);
+    }
+  });
+
+/**
+ * Initialize DNR blocking. Listens to protection toggle changes to enable/disable
+ * rules dynamically. Schedules a deferred first update so the blocklist has time
+ * to load (WXT's background main() must be synchronous; we don't want to fetch
+ * Tranco against an empty blocklist).
+ *
+ * The init-db.ts alarm fires its own updateDnrBlocking() on first sync, so the
+ * deferred call here is a no-op overlap once the blocklist arrives.
  */
 export const initDnrBlocking = () => {
+  setTimeout(() => updateDnrBlocking(), 3000);
+
   // Enable/disable rules when the protection toggle changes
-  storeProtectionEnabled.subscribe(async (enabled) => {
+  storeProtectionEnabled.subscribe((enabled) => {
     if (enabled) {
-      await updateDnrBlocking();
+      updateDnrBlocking();
     } else {
-      await disableDnrBlocking();
+      disableDnrBlocking();
     }
   });
 };

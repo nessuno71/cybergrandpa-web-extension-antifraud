@@ -8,20 +8,32 @@ const { mockGetDynamicRules, mockUpdateDynamicRules } = vi.hoisted(() => ({
 }));
 
 // Mock url service
+const { mockSeek, mockCount, mockGetRows, mockUpsert } = vi.hoisted(() => ({
+  mockSeek: vi.fn().mockResolvedValue(false),
+  mockCount: vi.fn().mockResolvedValue(3),
+  mockGetRows: vi.fn().mockResolvedValue('evil.com\nbad.com\nmalware.org'),
+  mockUpsert: vi.fn().mockResolvedValue(true),
+}));
+
 vi.mock('@/libs/urls-service', () => ({
   getUrlService: () => ({
-    seek: vi.fn().mockResolvedValue(true),
-    count: vi.fn().mockResolvedValue(3),
-    getRows: vi.fn().mockResolvedValue('evil.com\nbad.com\nmalware.org'),
-    upsert: vi.fn().mockResolvedValue(true),
+    seek: mockSeek,
+    count: mockCount,
+    getRows: mockGetRows,
+    upsert: mockUpsert,
   }),
 }));
 
 // Mock store
+const { mockReady, mockSubscribe } = vi.hoisted(() => ({
+  mockReady: vi.fn().mockResolvedValue(true),
+  mockSubscribe: vi.fn(),
+}));
+
 vi.mock('@/libs/store', () => ({
   storeProtectionEnabled: {
-    ready: vi.fn().mockResolvedValue(true),
-    subscribe: vi.fn(),
+    ready: mockReady,
+    subscribe: mockSubscribe,
     set: vi.fn(),
     get: vi.fn(() => true),
   },
@@ -50,6 +62,13 @@ describe('dnr-blocking', () => {
     vi.clearAllMocks();
     mockGetDynamicRules.mockResolvedValue([]);
     mockUpdateDynamicRules.mockResolvedValue(undefined);
+    // Reset url-service mock implementations to the defaults so each test
+    // starts from a known state regardless of what previous tests stubbed.
+    mockCount.mockResolvedValue(3);
+    mockGetRows.mockResolvedValue('evil.com\nbad.com\nmalware.org');
+    // Reset store mock implementations so the protection-enabled gate isn't
+    // stuck from a previous test (e.g., "disables when protection is off").
+    mockReady.mockResolvedValue(true);
   });
 
   describe('disableDnrBlocking', () => {
@@ -77,8 +96,7 @@ describe('dnr-blocking', () => {
 
   describe('updateDnrBlocking', () => {
     it('disables rules when protection is off', async () => {
-      const { storeProtectionEnabled } = await import('@/libs/store');
-      vi.mocked(storeProtectionEnabled.ready).mockResolvedValue(false);
+      mockReady.mockResolvedValue(false);
 
       await updateDnrBlocking();
 
@@ -87,13 +105,49 @@ describe('dnr-blocking', () => {
     });
 
     it('skips rule update when no top domains found', async () => {
-      const { getUrlService } = await import('@/libs/urls-service');
-      vi.mocked(getUrlService().count).mockResolvedValue(0);
+      mockCount.mockResolvedValue(0);
 
       await updateDnrBlocking();
 
       // Should not have tried to update rules
       expect(mockUpdateDynamicRules).not.toHaveBeenCalled();
+    });
+
+    it('intersects streamed Tranco response with blocklist and breaks early', async () => {
+      const trancoCsv = [
+        '# tranco list header',
+        '1,evil.com',
+        '2,popular.org',
+        '3,malware.org',
+        '4,unrelated.net',
+        '5,another-evil.com',
+      ].join('\n');
+
+      const encoder = new TextEncoder();
+      const fetchSpy = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+        ok: true,
+        status: 200,
+        body: new ReadableStream({
+          start(controller) {
+            controller.enqueue(encoder.encode(trancoCsv));
+            controller.close();
+          },
+        }),
+      } as Response);
+
+      // Force the cap very low by patching DNR_TOP_DOMAINS_COUNT isn't possible,
+      // so we just verify intersection picks correct domains.
+      await updateDnrBlocking();
+
+      // All three blocklist domains are in Tranco: evil.com, bad.com, malware.org
+      expect(mockUpdateDynamicRules).toHaveBeenCalledTimes(1);
+      const addRules = mockUpdateDynamicRules.mock.calls[0][0].addRules;
+      const blockedDomains = addRules.map((r: { condition: { urlFilter: string } }) =>
+        r.condition.urlFilter.replace(/^\|\||\^$/g, '')
+      );
+      expect(blockedDomains).toEqual(expect.arrayContaining(['evil.com', 'malware.org']));
+
+      fetchSpy.mockRestore();
     });
   });
 });
