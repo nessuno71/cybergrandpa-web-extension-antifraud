@@ -9,7 +9,7 @@ export const CONFIG_WWW_HELP = CONFIG_LINK_PREFIX + i18n.t('global.wwwHelp');
 
 export const CONFIG_WWW_MAIN = CONFIG_LINK_PREFIX + i18n.t('global.wwwMain');
 
-export const CONFIG_LOCAL_URL_MATCHES = '^(?!chrome|firefox|edge|file):.*$';
+export const CONFIG_LOCAL_URL_MATCHES = '^(?!chrome|firefox|edge|file).*';
 
 export const CONFIG_LOCAL_URL_PATTERN = [
   { urlMatches: 'https://*/*' },
