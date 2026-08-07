@@ -17,6 +17,7 @@ export default defineConfig({
       'storage',
       'tabs',
       'webNavigation',
+      'declarativeNetRequest',
       'declarativeNetRequestWithHostAccess',
     ],
     host_permissions: ['<all_urls>'],

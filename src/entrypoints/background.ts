@@ -1,5 +1,6 @@
 import { STORAGE_DB_URLS } from '@/config';
 import { initBadge } from '@/libs/badge';
+import { initDnrBlocking } from '@/libs/dnr-blocking';
 import { initDb } from '@/libs/init-db';
 import { initNewsService } from '@/libs/news-service';
 import { storeOnBoardingCompleted, storeScanning } from '@/libs/store';
@@ -72,8 +73,11 @@ const main = () => {
   // Initialize database
   initDb(urlService);
 
-  // Initialize web blocking
+  // Initialize web blocking (fallback for full blocklist via confirm dialog)
   initWebBlocking();
+
+  // Initialize DNR blocking (fast path for top ~5K most popular blocked domains)
+  initDnrBlocking();
 
   // Keep the toolbar badge in sync with the protection state
   initBadge();
