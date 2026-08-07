@@ -158,7 +158,7 @@ All components use Svelte 5 runes syntax. Each entrypoint (popup, options, wizar
 - **Framework**: WXT 0.20.15 (web extension framework)
 - **Frontend**: Svelte 5.50.1 with runes
 - **Styling**: SASS/SCSS 1.97.3, PostCSS with rem-to-px conversion
-- **Database**: LokiJS (in-memory)
+- **Database**: WXT storage API (compressed base64 blocklist in memory)
 - **Communication**: @webext-core/proxy-service 2.0.0
 - **i18n**: @wxt-dev/i18n with YAML files (28 languages)
 - **TypeScript**: 5.9.3, Strict mode enabled

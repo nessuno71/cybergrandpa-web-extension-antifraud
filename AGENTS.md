@@ -11,7 +11,7 @@ Cross-browser anti-fraud web extension that blocks malicious URLs using a distri
 - **Framework**: WXT 0.20.15 (Web Extension Framework)
 - **Frontend**: Svelte 5.50.1 with runes (`$state`, `$derived`, `$effect`)
 - **Styling**: SASS/SCSS, PostCSS with rem-to-px
-- **Database**: LokiJS (in-memory)
+- **Database**: WXT storage API (compressed base64 blocklist in memory)
 - **Communication**: @webext-core/proxy-service
 - **i18n**: @wxt-dev/i18n (28 languages)
 - **Package Manager**: Bun (never use npm or yarn)

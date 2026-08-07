@@ -89,7 +89,6 @@ This document outlines the development roadmap for the CyberGrandpa Anti-Fraud w
 3. **Documentation**
    - No API documentation
    - No contribution guidelines
-   - CLAUDE.md mentions LokiJS but project uses WXT storage
 
 ## Priority Roadmap
 
@@ -165,7 +164,7 @@ This document outlines the development roadmap for the CyberGrandpa Anti-Fraud w
      - [ ] Troubleshooting guide
    - [ ] Add CONTRIBUTING.md
    - [ ] Add CHANGELOG.md
-   - [ ] Update CLAUDE.md to remove LokiJS references
+   - [x] ~~Update CLAUDE.md to remove LokiJS references~~
    - [ ] Add JSDoc comments to all public APIs
    - [ ] Create user manual for extension features
 
@@ -225,8 +224,7 @@ This document outlines the development roadmap for the CyberGrandpa Anti-Fraud w
 
 ### High Priority
 
-1. **Architecture Mismatch:** Documentation mentions LokiJS but code uses WXT storage
-2. **`storeNewsEnabled`:** Wizard collects this preference but no data source exists
+1. **`storeNewsEnabled`:** Wizard collects this preference but no data source exists
 
 ### Medium Priority
 
@@ -289,7 +287,7 @@ This document outlines the development roadmap for the CyberGrandpa Anti-Fraud w
    - declarativeNetRequest vs current scripting.executeScript approach?
 
 2. **Quick Wins (Can be done now):**
-   - Update CLAUDE.md to remove LokiJS mention
+   - ~~Update CLAUDE.md to remove LokiJS mention~~ (done)
    - Add CHANGELOG.md (partially exists, needs updating)
 
 3. **Foundation Work:**
