@@ -37,6 +37,9 @@ popup:
   billing: الفواتير
 options:
   title: الخيارات
+  newsTitle: أحدث أخبار الأمن السيبراني
+  newsEmpty: لا توجد تحديثات متاحة.
+  newsError: فشل تحميل الأخبار. يرجى المحاولة لاحقًا.
 wizard:
   title: معالج الإعدادات
   userWelcomeMessage: مرحباً صديقي!

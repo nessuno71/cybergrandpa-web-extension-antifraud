@@ -37,6 +37,9 @@ popup:
   billing: 计费
 options:
   title: 选项
+  newsTitle: 最新网络安全新闻
+  newsEmpty: 暂无更新。
+  newsError: 加载新闻失败。请稍后重试。
 wizard:
   title: 设置向导
   userWelcomeMessage: 欢迎，朋友！

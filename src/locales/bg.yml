@@ -37,6 +37,9 @@ popup:
   billing: Биллинг
 options:
   title: Опции
+  newsTitle: Последни новини за киберсигурност
+  newsEmpty: Няма налични актуализации.
+  newsError: Неуспешно зареждане на новините. Моля, опитайте по-късно.
 wizard:
   title: Съветник за настройка
   userWelcomeMessage: Добре дошли, приятелю!

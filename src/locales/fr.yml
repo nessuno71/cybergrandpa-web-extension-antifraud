@@ -37,6 +37,9 @@ popup:
   billing: Abonnement
 options:
   title: Options
+  newsTitle: Dernières actualités de cybersécurité
+  newsEmpty: Aucune mise à jour disponible.
+  newsError: Échec du chargement des actualités. Veuillez réessayer plus tard.
 wizard:
   title: Paramètres de l'assistant
   userWelcomeMessage: Bienvenue ami!

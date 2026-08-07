@@ -37,6 +37,9 @@ popup:
   billing: Facturare
 options:
   title: Opțiuni
+  newsTitle: Cele mai recente știri de securitate cibernetică
+  newsEmpty: Nu sunt disponibile actualizări.
+  newsError: Încărcarea știrilor a eșuat. Încercați din nou mai târziu.
 wizard:
   title: Asistentul de configurare
   userWelcomeMessage: Bine ai venit, prietene!

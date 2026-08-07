@@ -37,6 +37,9 @@ popup:
   billing: Fakturering
 options:
   title: Innstillinger
+  newsTitle: Siste cybersikkerhetsnyheter
+  newsEmpty: Ingen oppdateringer tilgjengelige.
+  newsError: Kunne ikke laste nyheter. Prøv igjen senere.
 wizard:
   title: Innstillingsveiviser
   userWelcomeMessage: Velkommen, venn!

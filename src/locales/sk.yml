@@ -37,6 +37,9 @@ popup:
   billing: Fakturácia
 options:
   title: Možnosti
+  newsTitle: Najnovšie správy o kybernetickej bezpečnosti
+  newsEmpty: Nie sú k dispozícii žiadne aktualizácie.
+  newsError: Nepodarilo sa načítať správy. Skúste to neskôr.
 wizard:
   title: Sprievodca nastavením
   userWelcomeMessage: Vitajte, priateľ!

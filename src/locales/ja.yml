@@ -37,6 +37,9 @@ popup:
   billing: 請求
 options:
   title: オプション
+  newsTitle: 最新のサイバーセキュリティニュース
+  newsEmpty: 利用可能な更新はありません。
+  newsError: ニュースの読み込みに失敗しました。後でもう一度お試しください。
 wizard:
   title: 設定ウィザード
   userWelcomeMessage: ようこそ、友よ！

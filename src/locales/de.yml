@@ -37,6 +37,9 @@ popup:
   billing: Abrechnung
 options:
   title: Optionen
+  newsTitle: Aktuelle Cybersicherheits-Nachrichten
+  newsEmpty: Keine Aktualisierungen verfügbar.
+  newsError: Nachrichten konnten nicht geladen werden. Bitte später erneut versuchen.
 wizard:
   title: Einstellungsassistent
   userWelcomeMessage: Willkommen Freund!

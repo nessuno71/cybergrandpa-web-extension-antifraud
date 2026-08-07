@@ -37,6 +37,9 @@ popup:
   scanning: Scansionando
 options:
   title: Opzioni
+  newsTitle: Ultime notizie sulla cybersicurezza
+  newsEmpty: Nessun aggiornamento disponibile.
+  newsError: Caricamento delle notizie non riuscito. Riprova più tardi.
 wizard:
   title: Procedura Guidata Impostazioni
   userWelcomeMessage: Benvenuto!

@@ -37,6 +37,9 @@ popup:
   billing: Білінг
 options:
   title: Налаштування
+  newsTitle: Останні новини кібербезпеки
+  newsEmpty: Оновлень немає.
+  newsError: Не вдалося завантажити новини. Спробуйте пізніше.
 wizard:
   title: Майстер налаштування
   userWelcomeMessage: Ласкаво просимо, друже!

@@ -37,6 +37,9 @@ popup:
   billing: Fakturering
 options:
   title: Alternativ
+  newsTitle: Senaste cybersäkerhetsnyheterna
+  newsEmpty: Inga uppdateringar tillgängliga.
+  newsError: Kunde inte läsa in nyheter. Försök igen senare.
 wizard:
   title: Inställningsguide
   userWelcomeMessage: Välkommen, vän!

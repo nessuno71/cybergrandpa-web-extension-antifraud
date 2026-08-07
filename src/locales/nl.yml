@@ -37,6 +37,9 @@ popup:
   scanning: Scannen
 options:
   title: Opties
+  newsTitle: Laatste cyberbeveiligingsnieuws
+  newsEmpty: Geen updates beschikbaar.
+  newsError: Nieuws laden mislukt. Probeer het later opnieuw.
 wizard:
   title: Instellingenwizard
   userWelcomeMessage: Welkom vriend!

@@ -37,6 +37,9 @@ popup:
   billing: 결제
 options:
   title: 옵션
+  newsTitle: 최신 사이버 보안 뉴스
+  newsEmpty: 사용 가능한 업데이트가 없습니다.
+  newsError: 뉴스를 로드하지 못했습니다. 나중에 다시 시도해 주세요.
 wizard:
   title: 설정 마법사
   userWelcomeMessage: 친구여, 환영합니다!

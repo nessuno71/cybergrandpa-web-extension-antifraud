@@ -37,6 +37,9 @@ popup:
   billing: Naplata
 options:
   title: Opcije
+  newsTitle: Najnovije vijesti o kibernetičkoj sigurnosti
+  newsEmpty: Nema dostupnih ažuriranja.
+  newsError: Učitavanje vijesti nije uspjelo. Pokušajte kasnije.
 wizard:
   title: Čarobnjak postavki
   userWelcomeMessage: Dobrodošli, prijatelju!

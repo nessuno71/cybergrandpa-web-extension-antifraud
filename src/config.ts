@@ -29,4 +29,10 @@ export const STORAGE_DB_URLS = 'local:urls-db';
 
 export const STORAGE_KEY_URLS = 'local:syncing-urls';
 
+export const STORAGE_KEY_NEWS = 'local:syncing-news';
+
 export const STREAM_URL = 'https://hblock.molinero.dev/hosts';
+
+// Placeholder until the backend at cybergrandpa.space serves a real feed.
+// Returns an empty array gracefully — the UI shows "No updates" instead of breaking.
+export const NEWS_FEED_URL = 'https://cybergrandpa.space/api/news.json';

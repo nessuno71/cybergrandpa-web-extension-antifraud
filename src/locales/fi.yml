@@ -37,6 +37,9 @@ popup:
   billing: Laskutus
 options:
   title: Asetukset
+  newsTitle: Viimeisimmät kyberturvallisuusuutiset
+  newsEmpty: Päivityksiä ei saatavilla.
+  newsError: Uutisten lataus epäonnistui. Yritä myöhemmin uudelleen.
 wizard:
   title: Asetusohjattu
   userWelcomeMessage: Tervetuloa, ystävä!
