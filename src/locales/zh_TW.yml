@@ -37,6 +37,9 @@ popup:
   billing: 帳單
 options:
   title: 選項
+  newsTitle: 最新網路安全新聞
+  newsEmpty: 暫無更新。
+  newsError: 載入新聞失敗。請稍後重試。
 wizard:
   title: 設定精靈
   userWelcomeMessage: 歡迎，朋友！

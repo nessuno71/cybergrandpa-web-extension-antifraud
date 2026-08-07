@@ -37,6 +37,9 @@ popup:
   billing: Fakturace
 options:
   title: Možnosti
+  newsTitle: Nejnovější zprávy o kybernetické bezpečnosti
+  newsEmpty: Nejsou k dispozici žádné aktualizace.
+  newsError: Nepodařilo se načíst zprávy. Zkuste to prosím později.
 wizard:
   title: Průvodce nastavením
   userWelcomeMessage: Vítejte, příteli!

@@ -37,6 +37,9 @@ popup:
   billing: Számlázás
 options:
   title: Beállítások
+  newsTitle: Legújabb kiberbiztonsági hírek
+  newsEmpty: Nincs elérhető frissítés.
+  newsError: Hírek betöltése sikertelen. Próbálja meg később.
 wizard:
   title: Beállítási varázsló
   userWelcomeMessage: Üdvözöljük, barátom!

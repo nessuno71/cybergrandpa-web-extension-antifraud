@@ -37,6 +37,9 @@ popup:
   billing: Billing
 options:
   title: Options
+  newsTitle: Latest Cybersecurity News
+  newsEmpty: No updates available.
+  newsError: Failed to load news. Please try again later.
 wizard:
   title: Settings Wizard
   userWelcomeMessage: Welcome friend!

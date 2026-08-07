@@ -37,6 +37,9 @@ popup:
   billing: बिलिंग
 options:
   title: विकल्प
+  newsTitle: नवीनतम साइबर सुरक्षा समाचार
+  newsEmpty: कोई अपडेट उपलब्ध नहीं है।
+  newsError: समाचार लोड करने में विफल। कृपया बाद में पुनः प्रयास करें।
 wizard:
   title: सेटिंग विज़ार्ड
   userWelcomeMessage: स्वागत है, दोस्त!

@@ -37,6 +37,9 @@ popup:
   billing: Facturación
 options:
   title: Opciones
+  newsTitle: Últimas noticias de ciberseguridad
+  newsEmpty: No hay actualizaciones disponibles.
+  newsError: Error al cargar las noticias. Inténtelo de nuevo más tarde.
 wizard:
   title: Asistente de Configuración
   userWelcomeMessage: ¡Bienvenido amigo!

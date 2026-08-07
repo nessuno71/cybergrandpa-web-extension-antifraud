@@ -37,6 +37,9 @@ popup:
   billing: Faturalandırma
 options:
   title: Seçenekler
+  newsTitle: En son siber güvenlik haberleri
+  newsEmpty: Güncelleme mevcut değil.
+  newsError: Haberler yüklenemedi. Lütfen daha sonra tekrar deneyin.
 wizard:
   title: Ayarlar Sihirbazı
   userWelcomeMessage: Hoş geldin, arkadaşım!

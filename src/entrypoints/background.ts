@@ -1,6 +1,7 @@
 import { STORAGE_DB_URLS } from '@/config';
 import { initBadge } from '@/libs/badge';
 import { initDb } from '@/libs/init-db';
+import { initNewsService } from '@/libs/news-service';
 import { storeOnBoardingCompleted, storeScanning } from '@/libs/store';
 import { registerUrlService } from '@/libs/urls-service';
 import { initWebBlocking } from '@/libs/web-blocking';
@@ -76,6 +77,9 @@ const main = () => {
 
   // Keep the toolbar badge in sync with the protection state
   initBadge();
+
+  // Initialize news feed (only fetches if user opted in via wizard)
+  initNewsService();
 };
 
 export default defineBackground({

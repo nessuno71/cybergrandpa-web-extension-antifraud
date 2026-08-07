@@ -61,3 +61,10 @@ export interface UrlService {
   seek(url: string): boolean;
   upsert(base64string: string): Promise<boolean>;
 }
+
+export interface NewsItem {
+  id: string;
+  title: string;
+  url: string;
+  date: string;
+}

@@ -37,6 +37,9 @@ popup:
   billing: Rozliczenia
 options:
   title: Opcje
+  newsTitle: Najnowsze wiadomości o cyberbezpieczeństwie
+  newsEmpty: Brak dostępnych aktualizacji.
+  newsError: Nie udało się załadować wiadomości. Spróbuj ponownie później.
 wizard:
   title: Kreator ustawień
   userWelcomeMessage: Witaj, przyjacielu!

@@ -37,6 +37,9 @@ popup:
   billing: Биллинг
 options:
   title: Настройки
+  newsTitle: Последние новости кибербезопасности
+  newsEmpty: Нет доступных обновлений.
+  newsError: Не удалось загрузить новости. Повторите попытку позже.
 wizard:
   title: Мастер настройки
   userWelcomeMessage: Добро пожаловать, друг!
