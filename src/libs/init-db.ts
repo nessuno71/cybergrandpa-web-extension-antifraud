@@ -1,6 +1,7 @@
 import { STORAGE_KEY_URLS, STREAM_URL } from '@/config';
 import { checkAlarmState, GetStream, type UrlService } from '@/utils';
 import { logger } from '@/utils/logger';
+import { updateDnrBlocking } from './dnr-blocking';
 import { storeLatestUpdate } from './store';
 
 export const initDb = (urlService: UrlService) => {
@@ -18,6 +19,11 @@ export const initDb = (urlService: UrlService) => {
       // Surfaced as "Latest Update" in the status panel, so only stamp it on success
       if (await urlService.upsert(base64string)) {
         storeLatestUpdate.set(new Date().toLocaleString());
+
+        // Update DNR rules after blocklist sync — the top-N most popular
+        // blocked domains get instant network-layer blocking via DNR.
+        // The full blocklist is still covered by web-blocking.ts fallback.
+        await updateDnrBlocking();
       }
     } catch (error) {
       logger.error('Failed to sync URL database:', error);

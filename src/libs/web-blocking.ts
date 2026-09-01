@@ -5,6 +5,14 @@ import { notifyBlockedUrl } from './notify';
 import { storeProtectionEnabled } from './store';
 import { getUrlService } from './urls-service';
 
+// This is the FALLBACK blocking path. It catches the full 464K-domain blocklist
+// via webNavigation.onBeforeNavigate + a user confirm dialog.
+//
+// The FAST path is dnr-blocking.ts, which blocks the top ~5K most popular
+// blocked domains at the network layer via declarativeNetRequest — before
+// any content loads. DNR-blocked URLs never reach this code path.
+//
+// Together: DNR handles common threats instantly, this handles the long tail.
 export const initWebBlocking = () => {
   const urlService = getUrlService();
 
